@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UMA-SYSTEM.Backend", "UMA-SYSTEM.Backend\UMA-SYSTEM.Backend.csproj", "{D7393A39-5AA2-466B-B811-7BF5353E799B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UMA-SYSTEM.Frontend", "UMA-SYSTEM.Frontend\UMA-SYSTEM.Frontend.csproj", "{CE7CE729-7FC9-47E0-81D1-7DB5CCDB82B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7393A39-5AA2-466B-B811-7BF5353E799B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7393A39-5AA2-466B-B811-7BF5353E799B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7393A39-5AA2-466B-B811-7BF5353E799B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7393A39-5AA2-466B-B811-7BF5353E799B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE7CE729-7FC9-47E0-81D1-7DB5CCDB82B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE7CE729-7FC9-47E0-81D1-7DB5CCDB82B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE7CE729-7FC9-47E0-81D1-7DB5CCDB82B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE7CE729-7FC9-47E0-81D1-7DB5CCDB82B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C5B1265-9A57-4D68-AC6B-A59832478E42}
+	EndGlobalSection
+EndGlobal

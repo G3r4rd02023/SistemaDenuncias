@@ -1,0 +1,6 @@
+@UMA_SYSTEM.Backend_HostAddress = http://localhost:5024
+
+GET {{UMA_SYSTEM.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
