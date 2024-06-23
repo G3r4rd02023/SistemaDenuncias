@@ -51,7 +51,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Message"] = "Usuario registrado exitosamente!!!";
-                    await _bitacora.AgregarRegistro(usuario.Id, 1, "Inserto", "Registro de un nuevo usuario");
+                    var email = Uri.EscapeDataString(usuario.Email);
+                    var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
+                    var usuarioJson = await userResponse.Content.ReadAsStringAsync();
+                    var user = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+                    await _bitacora.AgregarRegistro(user!.Id, 2, "Insertó", "Registro de un nuevo usuario");
                     return RedirectToAction("IniciarSesion", "Login");
                 }
                 else
@@ -129,6 +133,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var bitacora = JsonConvert.DeserializeObject<IEnumerable<Bitacora>>(content);
+                var email = Uri.EscapeDataString(User.Identity!.Name!);
+                var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
+                var usuarioJson = await userResponse.Content.ReadAsStringAsync();
+                var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+                await _bitacora.AgregarRegistro(usuario!.Id, 4, "Consultó", "Accedió a bitacora del sistema");
                 return View("VerBitacora", bitacora);
             }
             return View(new List<Bitacora>());

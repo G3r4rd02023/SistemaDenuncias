@@ -7,13 +7,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>@ViewData["Title"]</title>
+   
     <style>
         .transparent-image-container {
             position: relative;
             width: 100%;
-            height: 100vh; 
-            overflow: hidden; 
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,17 +26,27 @@
             left: 50%;
             width: 100%;
             height: 100%;
-            object-fit: cover; 
+            object-fit: cover;
             transform: translate(-50%, -50%);
             opacity: 0.5;
+        }
+
+        .carousel-inner > .item > img {
+            width: 100%;
+            height: auto;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
     <div class="text-center transparent-image-container">
-        <img src="/images/umaletras.png" alt="Descriptive text" class="transparent-image" />
-    </div>
+        <img src="/images/umaletras.png" alt="Descriptive text" class="transparent-image" />       
+    </div>    
 </body>
 </html>
-
-

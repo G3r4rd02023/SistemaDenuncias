@@ -16,8 +16,33 @@ namespace UMA_SYSTEM.Backend.Data
         {
             await _context.Database.EnsureCreatedAsync();
             await ValidarRolesAsync("Administrador");
+            await ValidarRolesAsync("Usuario");
+            await ValidarObjetosAsync("Login", "Pantalla de Login", "Formulario");
+            await ValidarObjetosAsync("Registro", "Pantalla de registro", "Formulario");
+            await ValidarObjetosAsync("Home", "Pantalla de inicio", "Pantalla");
+            await ValidarObjetosAsync("Bitacora", "Pantalla de bitacora", "Pantalla");
             var rol = _context.Roles.FirstOrDefault();
             await ValidarUsuariosAsync("0801-1997-12345","SUPER","ADMIN", "superadmin@gmail.com","123456", "Activo", rol!);
+        }
+
+        private async Task<Objeto> ValidarObjetosAsync(string nombre, string descripcion, string tipo)
+        {
+            var objetoExistente = await _context.Objetos.FirstOrDefaultAsync(o => o.Nombre == nombre);
+            if (objetoExistente != null)
+            {
+                return objetoExistente;
+            }
+
+            Objeto objeto = new()
+            {
+                Nombre = nombre,
+                Descripcion = descripcion,
+                Tipo = tipo
+            };
+
+            _context.Objetos.Add(objeto);
+            await _context.SaveChangesAsync();
+            return objeto;
         }
 
         private async Task<Rol> ValidarRolesAsync(string nombreRol)

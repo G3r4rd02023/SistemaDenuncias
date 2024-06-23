@@ -39,7 +39,7 @@ namespace UMA_SYSTEM.Frontend
             app.UseAuthentication();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Login}/{action=IniciarSesion}/{id?}");
+                pattern: "{controller=Home}/{action=Privacy}/{id?}");
 
             app.Run();
         }
