@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using UMA_SYSTEM.Frontend.Services;
 
 namespace UMA_SYSTEM.Frontend
 {
@@ -11,7 +12,7 @@ namespace UMA_SYSTEM.Frontend
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
-
+            builder.Services.AddScoped<IBitacoraService, BitacoraService>();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddCookie(options =>
            {

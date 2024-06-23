@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
+using UMA_SYSTEM.Frontend.Services;
 
 namespace UMA_SYSTEM.Frontend.Controllers
 {
@@ -13,12 +14,13 @@ namespace UMA_SYSTEM.Frontend.Controllers
     {
 
         private readonly HttpClient _httpClient;
-      
+        private readonly IBitacoraService _bitacora;
 
-        public LoginController(IHttpClientFactory httpClientFactory)
+        public LoginController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService)
         {
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _bitacora = bitacoraService;
         }
 
         public IActionResult Registro()
@@ -49,6 +51,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["Message"] = "Usuario registrado exitosamente!!!";
+                    await _bitacora.AgregarRegistro(usuario.Id, 1, "Inserto", "Registro de un nuevo usuario");
                     return RedirectToAction("IniciarSesion", "Login");
                 }
                 else
@@ -96,12 +99,12 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
+                    await _bitacora.AgregarRegistro(usuario.Id, 1, "Inicio sesión", "Inicio de sesión en el sistema");
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ViewData["AlertMessage"] = "Error al iniciar sesion!!!";
+                    ViewData["AlertMessage"] = "Error al iniciar sesión!!!";
                 }
             }
 
@@ -111,7 +114,24 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public async Task<IActionResult> CerrarSesion()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var email = Uri.EscapeDataString(User.Identity!.Name!);
+            var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
+            var usuarioJson = await userResponse.Content.ReadAsStringAsync();
+            var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+            await _bitacora.AgregarRegistro(usuario!.Id, 1, "Finalizó sesión", "Fin de la sesión en el sistema");
             return RedirectToAction("IniciarSesion", "Login");
+        }
+
+        public async Task<IActionResult> VerBitacora()
+        {
+            var response = await _httpClient.GetAsync("/api/Bitacora");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var bitacora = JsonConvert.DeserializeObject<IEnumerable<Bitacora>>(content);
+                return View("VerBitacora", bitacora);
+            }
+            return View(new List<Bitacora>());
         }
     }
 }
