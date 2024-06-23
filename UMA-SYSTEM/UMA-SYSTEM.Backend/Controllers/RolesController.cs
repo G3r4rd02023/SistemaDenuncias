@@ -21,5 +21,17 @@ namespace UMA_SYSTEM.Backend.Controllers
         {
             return Ok(await _context.Roles.ToListAsync());
         }
+       
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var role = await _context.Roles.FindAsync(id);
+            if (role == null)
+            {
+                return NotFound();
+            }
+            return Ok(role);
+        }
+
     }
 }

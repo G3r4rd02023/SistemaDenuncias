@@ -7,25 +7,77 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/UMA_SYSTEM.Frontend.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-light bg-success">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">UMA_SYSTEM.Frontend</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand text-light" href="#">UMA-SYSTEM</a>
+                <button class="navbar-toggler text-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                <div class="offcanvas offcanvas-end bg-success" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title text-white-50" id="offcanvasNavbarLabel">UMA-SYSTEM</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active text-white-50" asp-controller="Home" asp-action="Index">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="#"></a>
+                            </li>
+                            @if (User.Identity!.IsAuthenticated && User.IsInRole("ADMINISTRADOR"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white-50" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Menu
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Solicitudes" asp-action="Index">Solicitudes</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Denuncias" asp-action="Index">Denuncias</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Reportes" asp-action="Index">Reportes</a></li>
+                                        
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" asp-controller="Prestamos" asp-action="Index">Prestamos</a></li>
+
+                                    </ul>
+                                </li>
+                            }                           
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("USUARIO"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Libros" asp-action="Index">Libros</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Prestamos" asp-action="Index">Prestamos</a>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white-50" asp-area="" asp-controller="Usuarios"
+                                       asp-action="Edit"><strong>Hola! @User.Identity.Name</strong></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white-50" asp-area="" asp-controller="Login" asp-action="CerrarSesion">Cerrar Sesión</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="IniciarSesion">Iniciar Sesión</a>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

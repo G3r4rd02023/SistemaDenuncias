@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UMA_SYSTEM.Backend.Models
+namespace UMA_SYSTEM.Frontend.Models
 {
     public class Usuario
     {
@@ -31,8 +32,7 @@ namespace UMA_SYSTEM.Backend.Models
 
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string EstadoUsuario { get; set; } = null!;
-        public int RolId { get; set; }
-        public Rol? Rol { get; set; }
-
+        public int RolId { get; set; }       
+        public Rol? Rol { get; set; } 
     }
 }

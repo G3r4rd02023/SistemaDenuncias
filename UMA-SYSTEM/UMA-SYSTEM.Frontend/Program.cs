@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace UMA_SYSTEM.Frontend
 {
     public class Program
@@ -8,6 +10,14 @@ namespace UMA_SYSTEM.Frontend
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient();
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+           .AddCookie(options =>
+           {
+              options.LoginPath = "/Login/IniciarSesion";
+              options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+           });
 
             var app = builder.Build();
 
@@ -25,10 +35,10 @@ namespace UMA_SYSTEM.Frontend
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Login}/{action=IniciarSesion}/{id?}");
 
             app.Run();
         }
