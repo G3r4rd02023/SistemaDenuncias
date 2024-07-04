@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/UMA_SYSTEM.Frontend.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
@@ -25,7 +26,8 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="nav-link active text-white-50" asp-controller="Home" asp-action="Index">Inicio</a>
+                                <a class="nav-link active text-white-50" asp-controller="Home" asp-action="Index">
+                                    <span class="oi oi-home"></span>  Inicio</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white" href="#"></a>
@@ -34,18 +36,12 @@
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-white-50" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Menu
+                                        <span class="oi oi-list"></span>  Menu
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
-                                        <li><a class="dropdown-item" asp-controller="Solicitudes" asp-action="Index">Solicitudes</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Denuncias" asp-action="Index">Denuncias</a></li>
-                                        <li><a class="dropdown-item" asp-controller="Login" asp-action="VerBitacora">Bitacora</a></li>
-                                        
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" asp-controller="Prestamos" asp-action="Index">Prestamos</a></li>
-
+                                    <ul class="dropdown-menu bg-success" aria-labelledby="offcanvasNavbarDropdown">
+                                        <li><a class="dropdown-item text-white-50" asp-controller="Solicitudes" asp-action="Index"><span class="oi oi-clipboard"></span>  Solicitudes</a></li>
+                                        <li><a class="dropdown-item text-white-50" asp-controller="Denuncias" asp-action="Index"><span class="oi oi-book"></span>  Denuncias</a></li>
+                                        <li><a class="dropdown-item text-white-50" asp-controller="Login" asp-action="VerBitacora"><span class="oi oi-pencil"></span>  Bitacora</a></li>
                                     </ul>
                                 </li>
                             }                           
@@ -63,10 +59,11 @@
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-white-50" asp-area="" asp-controller="Usuarios"
-                                       asp-action="Edit"><strong>Hola! @User.Identity.Name</strong></a>
+                                       asp-action="Edit"><span class="oi oi-person"></span><strong>  Hola! @User.Identity.Name</strong></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white-50" asp-area="" asp-controller="Login" asp-action="CerrarSesion">Cerrar Sesión</a>
+                                    <a class="nav-link text-white-50" asp-area="" asp-controller="Login" asp-action="CerrarSesion"> 
+                                        <span class="oi oi-expand-right"></span>  Cerrar Sesión</a>
                                 </li>
                             }
                             else
