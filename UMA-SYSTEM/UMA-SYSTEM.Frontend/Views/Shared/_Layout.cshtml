@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/UMA_SYSTEM.Frontend.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    @await RenderSectionAsync("Estilos", required: false)
 </head>
 <body>
     <header>
@@ -30,7 +31,9 @@
                                     <span class="oi oi-home"></span>  Inicio</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="#"></a>
+                                <a class="nav-link active text-white-50" asp-controller="Usuarios" asp-action="Index">
+                                    <span class="oi oi-people"></span>  Usuarios
+                                </a>
                             </li>
                             @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrador"))
                             {

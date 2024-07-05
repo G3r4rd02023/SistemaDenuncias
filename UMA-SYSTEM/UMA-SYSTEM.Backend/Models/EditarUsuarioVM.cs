@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UMA_SYSTEM.Frontend.Models
+namespace UMA_SYSTEM.Backend.Models
 {
-    public class Usuario
+    public class EditarUsuarioVM
     {
         public int Id { get; set; }
 
@@ -18,21 +18,6 @@ namespace UMA_SYSTEM.Frontend.Models
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Apellidos { get; set; } = null!;
-
-        [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Email { get; set; } = null!;
-
-        [MaxLength(256, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string Contraseña { get; set; } = null!;
-        public DateTime FechaCreacion { get; set; }
-        public DateTime FechaVencimiento { get; set; }
-
-        [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        public string EstadoUsuario { get; set; } = null!;
-        public int RolId { get; set; }
-        public Rol? Rol { get; set; }
         public string FullName => $"{Nombre} {Apellidos}";
     }
 }

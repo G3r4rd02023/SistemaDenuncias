@@ -108,7 +108,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 }
                 else
                 {
-                    ViewData["AlertMessage"] = "Error al iniciar sesión!!!";
+                    ViewData["AlertMessage"] = "Usuario o contrasena incorrectos!!!";
                 }
             }
 

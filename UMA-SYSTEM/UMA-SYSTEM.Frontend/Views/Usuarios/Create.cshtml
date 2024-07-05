@@ -1,0 +1,54 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Usuario
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header text-center">            
+            <img src="/images/uma.png" style="width: 100px; height: auto;" />            
+        </div>
+        <div class="card-body text-success">
+            <h5>Crear Usuario </h5>
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="EstadoUsuario"/>
+                <div class="form-group">                    
+                    <input asp-for="DNI" class="form-control" placeholder="DNI" />
+                    <span asp-validation-for="DNI" class="text-danger"></span>
+                </div>
+                <div class="form-group">                   
+                    <input asp-for="Nombre" class="form-control" placeholder="Nombre" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+                <div class="form-group">                    
+                    <input asp-for="Apellidos" class="form-control" placeholder="Apellidos" />
+                    <span asp-validation-for="Apellidos" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Email" class="form-control" placeholder="Email" type="email"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Contraseña" class="form-control" placeholder="Contraseña" type="password"/>
+                    <span asp-validation-for="Contraseña" class="text-danger"></span>
+                </div>              
+                <div class="card-footer text-center">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="oi oi-check"></i> 
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">
+                            <i class="oi oi-arrow-thick-left"></i> 
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

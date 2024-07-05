@@ -11,10 +11,11 @@ namespace UMA_SYSTEM.Backend.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly DataContext _context;
+        
 
         public UsuariosController(DataContext context)
         {
-            _context = context;
+            _context = context;            
         }
 
         [HttpGet]
@@ -34,7 +35,7 @@ namespace UMA_SYSTEM.Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
-            var usuario = await _context.Usuarios
+            var usuario = await _context.Usuarios                
                 .SingleOrDefaultAsync(c => c.Id == id);
             if (usuario == null)
             {
@@ -58,14 +59,35 @@ namespace UMA_SYSTEM.Backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, [FromBody] Usuario usuario)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] EditarUsuarioVM usuario)
         {
             if (id != usuario.Id)
             {
                 return BadRequest();
             }
 
-            _context.Update(usuario);
+            var usuarioEncontrado = await _context.Usuarios.AsNoTracking().
+                FirstOrDefaultAsync(u => u.Id == usuario.Id);
+            if(usuarioEncontrado == null)
+            {
+                return NotFound();
+            }
+
+            var user = new Usuario()
+            {
+                Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Apellidos = usuario.Apellidos,
+                DNI = usuario.DNI,
+                Contraseña = usuarioEncontrado.Contraseña,
+                FechaCreacion = usuarioEncontrado.FechaCreacion,
+                FechaVencimiento = usuarioEncontrado.FechaVencimiento,
+                Email = usuarioEncontrado.Email,
+                EstadoUsuario = usuarioEncontrado.EstadoUsuario,
+                RolId = usuarioEncontrado.RolId
+            };
+
+            _context.Update(user);
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -79,6 +101,29 @@ namespace UMA_SYSTEM.Backend.Controllers
                 return NotFound();
             }
             _context.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPut("CambiarPassword/{id}")]
+        public async Task<IActionResult> CambiarPassword(int  id, [FromBody] CambiarPasswordVM model)
+        {
+            if (id != model.UserId)
+            {
+                return BadRequest();
+            }
+
+            var usuarioEncontrado = await _context.Usuarios.AsNoTracking().
+                FirstOrDefaultAsync(u => u.Id == model.UserId);
+            if (usuarioEncontrado == null)
+            {
+                return NotFound();
+            }
+
+
+            usuarioEncontrado.Contraseña = BCrypt.Net.BCrypt.HashPassword(model.NewPassword); 
+
+            _context.Update(usuarioEncontrado);
             await _context.SaveChangesAsync();
             return NoContent();
         }
