@@ -23,8 +23,29 @@ namespace UMA_SYSTEM.Backend.Data
             await ValidarObjetosAsync("Bitacora", "Pantalla de bitacora", "Pantalla");
             await ValidarParametrosAsync("Intentos permitidos", "3", 1);
             await ValidarParametrosAsync("Fecha de vencimiento de usuarios", "2", 1);
+            await ValidarEstadosAsync("Aceptado");
+            await ValidarEstadosAsync("Rechazado");
+            await ValidarEstadosAsync("En Proceso");
             var rol = _context.Roles.FirstOrDefault();
             await ValidarUsuariosAsync("0801-1997-12345","SUPER","ADMIN", "superadmin@gmail.com","123456", "Activo", rol!);
+        }
+
+        private async Task<Estado> ValidarEstadosAsync(string descripcion)
+        {
+            var estadoExistente = await _context.Estados.FirstOrDefaultAsync(e => e.Descripcion == descripcion);
+            if (estadoExistente != null) 
+            {
+                return estadoExistente;
+            }
+
+            Estado estado = new()
+            {
+                Descripcion = descripcion
+            };
+
+            _context.Estados.Add(estado);
+            await _context.SaveChangesAsync();
+            return estado;
         }
 
         private async Task<Parametro> ValidarParametrosAsync(string nombre, string valor, int idUsuario)

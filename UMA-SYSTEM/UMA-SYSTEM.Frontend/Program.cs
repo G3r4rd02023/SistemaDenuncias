@@ -14,6 +14,7 @@ namespace UMA_SYSTEM.Frontend
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IBitacoraService, BitacoraService>();
             builder.Services.AddScoped<IParametroService, ParametroService>();
+            builder.Services.AddScoped<IServicioLista, ServicioLista>();
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(20); 

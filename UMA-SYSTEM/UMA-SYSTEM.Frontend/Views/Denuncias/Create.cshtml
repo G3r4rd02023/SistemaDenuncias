@@ -1,0 +1,76 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Denuncia
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class=" card-header text-center">
+                <h5> Crear Denuncia</h5>
+            </div>
+            <div class=" card-body text-center">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>                   
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="NumExpediente" class="form-control" placeholder="No Expediente" />
+                        <span asp-validation-for="NumExpediente" class="text-danger"></span>
+                    </div>                    
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="PuntoReferencia" class="form-control" placeholder="Punto de referencia"/>
+                        <span asp-validation-for="PuntoReferencia" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="DescripcionHechos" class="form-control" placeholder="Descripción de los hechos"/>
+                        <span asp-validation-for="DescripcionHechos" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Municipio" class="form-control" placeholder="Municipio"/>
+                        <span asp-validation-for="Municipio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Aldea" class="form-control" placeholder="Aldea"/>
+                        <span asp-validation-for="Aldea" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Barrio" class="form-control" placeholder="Barrio" />
+                        <span asp-validation-for="Barrio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Caserio" class="form-control" placeholder="Caserío" />
+                        <span asp-validation-for="Caserio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <select asp-for="IdTipoDenuncia" asp-items="Model.Tipos" class="form-control"></select>
+                        <span asp-validation-for="IdTipoDenuncia" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <select asp-for="IdEstado" asp-items="Model.Estados" class="form-control" ></select>
+                        <span asp-validation-for="IdEstado" class="text-danger"></span>
+                    </div>
+                    <div class=" card-footer ">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-check"></i> Guardar</button>
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+

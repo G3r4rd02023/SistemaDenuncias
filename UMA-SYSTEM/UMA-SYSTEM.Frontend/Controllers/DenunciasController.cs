@@ -1,49 +1,50 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Net.Http;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
 using UMA_SYSTEM.Frontend.Services;
 
 namespace UMA_SYSTEM.Frontend.Controllers
 {
-    public class HomeController : Controller
+    public class DenunciasController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IServicioLista _lista;
-        private readonly HttpClient _httpClient;
 
-        public HomeController(ILogger<HomeController> logger, IServicioLista lista, IHttpClientFactory httpClientFactory)
+        private readonly HttpClient _httpClient;
+        private readonly IServicioLista _lista;
+
+        public DenunciasController(IHttpClientFactory httpClientFactory, IServicioLista lista)
         {
-            _logger = logger;
-            _lista = lista;
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _lista = lista;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var response = await _httpClient.GetAsync("/api/Denuncias");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var denuncias = JsonConvert.DeserializeObject<IEnumerable<Denuncia>>(content);
+                return View("Index", denuncias);
+            }
+
+            return View(new List<Denuncia>());
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> CrearDenuncia()
+        public async Task<IActionResult> Create()
         {
             Denuncia denuncia = new()
             {
                 Estados = await _lista.GetListaEstados(),
                 Tipos = await _lista.GetListaTipos()
-            };
+            }; 
             return View(denuncia);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CrearDenuncia(Denuncia denuncia)
+        public async Task<IActionResult> Create(Denuncia denuncia)
         {
             if (ModelState.IsValid)
             {
@@ -61,7 +62,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Error al crear la denuncia.");
-                    TempData["ErrorMessage"] = "Ocurri� un error al intentar crear la denuncia!!!";
+                    TempData["ErrorMessage"] = "Ocurrió un error al intentar crear la denuncia!!!";
                 }
             }
             else
@@ -72,12 +73,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
             denuncia.Estados = await _lista.GetListaEstados();
             denuncia.Tipos = await _lista.GetListaTipos();
             return View(denuncia);
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
