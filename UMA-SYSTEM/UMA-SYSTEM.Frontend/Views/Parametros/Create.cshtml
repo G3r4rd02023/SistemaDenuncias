@@ -1,0 +1,42 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Parametro
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+
+<div class=" col-md-12">
+    <div class=" card">
+        <div class=" card-header text-center">
+            <h5> Crear Parametro</h5>
+        </div>
+        <div class=" card-body text-center">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Usuario"/>
+                <input type="hidden" asp-for="UsuarioId" />
+                <input type="hidden" asp-for="FechaModificacion" />
+                <input type="hidden" asp-for="FechaCreacion" />
+                <div class="form-group">
+                    <label></label>
+                    <input asp-for="Nombre" class="form-control" placeholder=" Nombre" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label></label>
+                    <input asp-for="Valor" class="form-control" placeholder=" Valor" />
+                    <span asp-validation-for="Valor" class="text-danger"></span>
+                </div>
+                <div class=" card-footer ">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-circle-check"></i> Guardar</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

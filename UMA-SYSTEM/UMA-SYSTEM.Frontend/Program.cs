@@ -13,12 +13,20 @@ namespace UMA_SYSTEM.Frontend
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IBitacoraService, BitacoraService>();
+            builder.Services.AddScoped<IParametroService, ParametroService>();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20); 
+                options.Cookie.HttpOnly = true; 
+                options.Cookie.IsEssential = true; 
+            });
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddCookie(options =>
            {
               options.LoginPath = "/Login/IniciarSesion";
               options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
            });
+
 
             var app = builder.Build();
 
@@ -34,7 +42,7 @@ namespace UMA_SYSTEM.Frontend
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
             app.UseAuthentication();
             app.MapControllerRoute(

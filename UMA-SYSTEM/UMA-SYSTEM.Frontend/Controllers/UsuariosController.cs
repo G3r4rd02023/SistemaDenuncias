@@ -191,5 +191,21 @@ namespace UMA_SYSTEM.Frontend.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"/api/Usuarios/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["AlertMessage"] = "Usuario eliminado exitosamente!!!";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["Error"] = "Error al eliminar el usuario.";
+                return RedirectToAction("Index");
+            }
+        }
+
     }
 }

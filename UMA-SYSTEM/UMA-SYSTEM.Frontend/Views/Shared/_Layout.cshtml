@@ -35,6 +35,11 @@
                                     <span class="oi oi-people"></span>  Usuarios
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-white-50" asp-controller="Parametros" asp-action="Index">
+                                    <span class="oi oi-cog"></span>  Configuracion
+                                </a>
+                            </li>
                             @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrador"))
                             {
                                 <li class="nav-item dropdown">

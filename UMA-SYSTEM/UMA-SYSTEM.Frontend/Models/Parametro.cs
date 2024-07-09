@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UMA_SYSTEM.Backend.Models
+namespace UMA_SYSTEM.Frontend.Models
 {
     public class Parametro
     {
@@ -21,6 +21,5 @@ namespace UMA_SYSTEM.Backend.Models
         public DateTime FechaCreacion { get; set; }
 
         public DateTime FechaModificacion { get; set; }
-
     }
 }

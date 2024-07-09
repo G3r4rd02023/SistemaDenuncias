@@ -21,8 +21,32 @@ namespace UMA_SYSTEM.Backend.Data
             await ValidarObjetosAsync("Registro", "Pantalla de registro", "Formulario");
             await ValidarObjetosAsync("Home", "Pantalla de inicio", "Pantalla");
             await ValidarObjetosAsync("Bitacora", "Pantalla de bitacora", "Pantalla");
+            await ValidarParametrosAsync("Intentos permitidos", "3", 1);
+            await ValidarParametrosAsync("Fecha de vencimiento de usuarios", "2", 1);
             var rol = _context.Roles.FirstOrDefault();
             await ValidarUsuariosAsync("0801-1997-12345","SUPER","ADMIN", "superadmin@gmail.com","123456", "Activo", rol!);
+        }
+
+        private async Task<Parametro> ValidarParametrosAsync(string nombre, string valor, int idUsuario)
+        {
+            var parametroExistente = await _context.Parametros.FirstOrDefaultAsync(p => p.Nombre == nombre);
+            if(parametroExistente != null)
+            {
+                return parametroExistente;
+            }
+
+            Parametro parametro = new()
+            {
+                Nombre = nombre,
+                Valor = valor,
+                UsuarioId = idUsuario,
+                FechaCreacion = DateTime.Now,
+                FechaModificacion = DateTime.Now
+            };
+
+            _context.Parametros.Add(parametro);
+            await _context.SaveChangesAsync();
+            return parametro;
         }
 
         private async Task<Objeto> ValidarObjetosAsync(string nombre, string descripcion, string tipo)

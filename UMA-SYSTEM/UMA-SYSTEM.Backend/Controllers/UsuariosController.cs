@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
 using UMA_SYSTEM.Backend.Data;
 using UMA_SYSTEM.Backend.Models;
 
@@ -27,6 +28,7 @@ namespace UMA_SYSTEM.Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(Usuario usuario)
         {
+            usuario.Contraseña = BCrypt.Net.BCrypt.HashPassword(usuario.Contraseña);
             _context.Add(usuario);
             await _context.SaveChangesAsync();
             return Ok();
@@ -127,6 +129,8 @@ namespace UMA_SYSTEM.Backend.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        
 
     }
 }
