@@ -74,5 +74,21 @@ namespace UMA_SYSTEM.Frontend.Controllers
             denuncia.Tipos = await _lista.GetListaTipos();
             return View(denuncia);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Error al obtener la denuncia.";
+                return RedirectToAction("Index");
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var denuncia = JsonConvert.DeserializeObject<Denuncia>(jsonString);
+
+            return View(denuncia);
+        }
     }
 }

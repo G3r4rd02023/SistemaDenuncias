@@ -25,12 +25,12 @@
 
 <p>
     <a onclick="showInPopup('@Url.Action("Create", "Denuncias", new { id = 0 }, Context.Request.Scheme)' , '')"
-       class="btn btn-sm btn-primary text-white"><i class="fa fa-plus-circle"></i> Crear denuncia</a>
+       class="btn btn-sm btn-primary text-white"><i class=" oi oi-plus"></i>  Crear denuncia</a>
 </p>
 
 <div class="col-md-12">
     <div class="card">
-        <div class="card-header text-center">
+        <div class="card-header text-center bg-info text-white">
             <h5>Listado de Denuncias</h5>
         </div>
         <div class="card-body">
@@ -38,6 +38,7 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Fecha</th>
                         <th scope="col">Expediente</th>
                         <th scope="col">Tipo de Denuncia</th>
                         <th scope="col">Estado</th>
@@ -49,12 +50,13 @@
                     {
                         <tr>
                             <th scope="row">@item.Id</th>
+                            <td>@item.Fecha.ToString("yyyy-MM-dd")</td>
                             <td>@Html.DisplayFor(modelItem => item.NumExpediente)</td>
                             <td>@Html.DisplayFor(modelItem => item.TipoDenuncia!.Descripcion)</td>
                             <td>@Html.DisplayFor(modelItem => item.Estado!.Descripcion)</td>
                             <td>
                                 <a onclick="showInPopup('@Url.Action("Details", "Denuncias", new { id = item.Id }, Context.Request.Scheme)' ,
-                    '')" class="btn btn-outline-warning btn-sm"><i class="oi oi-list"></i> </a>                                
+                    '')" class="btn btn-outline-info btn-sm"><i class="oi oi-list"></i> </a>                                
                             </td>
                         </tr>
                     }

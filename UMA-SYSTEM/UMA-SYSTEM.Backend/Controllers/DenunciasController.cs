@@ -49,6 +49,8 @@ namespace UMA_SYSTEM.Backend.Controllers
         public async Task<IActionResult> GetAsync(int id)
         {
             var denuncia = await _context.Denuncias
+                .Include(x => x.TipoDenuncia)
+                .Include(x => x.Estado)
                 .SingleOrDefaultAsync(c => c.Id == id);
             if (denuncia == null)
             {

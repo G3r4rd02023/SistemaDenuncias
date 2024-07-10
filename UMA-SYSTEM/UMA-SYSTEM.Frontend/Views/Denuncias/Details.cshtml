@@ -1,0 +1,77 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Denuncia
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/denuncias.css">
+    <meta charset="utf-8">   
+    <title>Alcaldia Municipal De valle de Angeles</title>
+</head>
+<body>
+    <div class="pagina1" id="printArea">
+        <div class="membrete">
+            <img class="av" src="~/images/Alcaldia Valle.png" align="left" style="width: 50px; height: auto;">
+            <img class="eh" src="~/images/Escudo Honduras.png" align ="right" style="width: 50px; height: auto;">
+        </div>
+        <h2>ALCALDIA MUNICIPAL DE VALLE DE ANGELES</h2>
+        <h3>Departmanento De Francisco Morazan, Honduras, C.A.</h3>
+        <h4>Cuidad Turistica</h4>
+        <h5>Unidad Municipal Ambiental (UMA)</h5>
+        <p class="pexpediente">
+            No De Expediente
+            <input class="expediente" pattern="[0-9]" name="NumExpediente" maxlength="10" value="@Model.NumExpediente">
+        </p>
+        <br>
+        Tegucigalpa, Munucipio del Distrito Cental con fecha
+        <input class="fecha" type="text" name="Fecha" value="@Model.Fecha.ToString("dd/MM/yyyy")" maxlength="15"> Se recibio en la Unidad Municipal Ambiental la denuncia interpuesta por vecino o recidente del municipio de Valle De Angeles
+        <input class="uma" type="text" name="NombreDenunciante" value="@Model.NumExpediente">
+        Punto de Referencia:
+        <input class="referencia" type="text" name="PuntoReferencia1" value="@Model.PuntoReferencia">
+        <input class="referencia2" type="text" name="PuntoReferencia2" value="@Model.PuntoReferencia">
+        <br>
+        Manifesto que se sucitaron los siguientes hechos:
+        <br>
+        <textarea class="hechos" rows="10" type="text" name="DescripcionHechos" placeholder="Dos hombres con motosierras estan cortando varios arboles en la zona, varios vehiculos de carga.">@Model.DescripcionHechos</textarea>
+        <br><br>
+        <form id="imageForm" action="procedar_imagen.php" method="post" enctype="multipart/form-data">
+            <label for="imagen">Seleciona una imagen:</label>
+            <input type="file" id="imagen" name="imagen" accept="image/*">
+            <input type="submit" onclick="alert('¡ ADJUNTO IMAGEN CON EXITO !'); return false;" value="subir imagen" name="">
+        </form>
+        <br><br>
+        <b>Por lo antes expuesto el Denunciante pide se pactique la inspeccion de rigor al lugar de los hechos por medio de los tecnicos de la Unidad Municipal Ambiental para verificar los hechos manifestados, finalmente que se proceda confome a lo establecido en la Legislacion Abiental y Municipal vigente.</b>
+        <br><br>
+        Denuncia Interpuesta:   Online  <input class="online" type="checkbox" name="Online"> Personalmente <input class="personalmente" type="checkbox" name="Personalmente">
+        <br><br><br>
+        <input class="ifirma" type="text" name="Firma">
+        <p class="firma">FIRMA DEL SOLICITANTE</p>
+        
+    </div>
+    <div class="buttons">
+        <a asp-action="Index" class="btn btn-sm btn-primary"><i class="oi oi-arrow-thick-left"></i> Volver</a>
+        <button type="submit" class="btn btn-sm btn-success">
+            <i class="oi oi-check"></i> Enviar Denuncia
+        </button>
+        <a asp-action="Index" class="btn btn-sm btn-secondary"><i class="oi oi-print"></i> Imprimir</a>
+    </div>
+
+    <script>
+        function printPage() {
+            const printArea = document.getElementById('printArea');
+            const imageForm = document.getElementById('imageForm');
+            imageForm.style.display = 'none'; // Ocultar formulario de imagen al imprimir
+            window.print();
+            imageForm.style.display = 'block'; // Mostrar formulario de imagen nuevamente después de imprimir
+        }
+    </script>
+</body>
+</html>
+
+
+

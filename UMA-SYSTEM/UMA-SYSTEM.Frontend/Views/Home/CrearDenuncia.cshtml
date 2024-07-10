@@ -1,15 +1,18 @@
 ﻿@model UMA_SYSTEM.Frontend.Models.Denuncia
 
 @{
-    ViewData["Title"] = "Crear Denuncia";   
+    ViewData["Title"] = "Create";
+    
 }
 
 
 <div class="row">
     <div class="col-md-12">
+        <h4 class=" text-center"> Denuncia</h4>
         <div class="card">
-            <div class=" card-header text-center">
-                <h5> Crear Denuncia</h5>
+            <div class=" card-header text-center bg-info">
+                <img src="~/images/Alcaldia Valle.png" align="left" style="width: 50px; height: auto; border-radius: 50%; object-fit: cover;">
+                <img src="~/images/Escudo Honduras.png" align="right" style="width: 50px; height: auto; border-radius: 50%; object-fit: cover;">
             </div>
             <div class=" card-body text-center">
                 <form asp-action="CrearDenuncia" method="post">
@@ -21,12 +24,17 @@
                     </div>
                     <div class="form-group">
                         <label></label>
-                        <input asp-for="PuntoReferencia" class="form-control" placeholder="Punto de referencia" />
+                        <select asp-for="IdTipoDenuncia" asp-items="Model.Tipos" class="form-control"></select>
+                        <span asp-validation-for="IdTipoDenuncia" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <textarea asp-for="PuntoReferencia" class="form-control" placeholder="Punto de referencia"></textarea>
                         <span asp-validation-for="PuntoReferencia" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label></label>
-                        <input asp-for="DescripcionHechos" class="form-control" placeholder="Descripción de los hechos" />
+                        <textarea asp-for="DescripcionHechos" class="form-control" placeholder="Descripción de los hechos"></textarea>
                         <span asp-validation-for="DescripcionHechos" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -49,20 +57,18 @@
                         <input asp-for="Caserio" class="form-control" placeholder="Caserío" />
                         <span asp-validation-for="Caserio" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label></label>
-                        <select asp-for="IdTipoDenuncia" asp-items="Model.Tipos" class="form-control"></select>
-                        <span asp-validation-for="IdTipoDenuncia" class="text-danger"></span>
-                    </div>
+
                     <div class="form-group">
                         <label></label>
                         <select asp-for="IdEstado" asp-items="Model.Estados" class="form-control"></select>
                         <span asp-validation-for="IdEstado" class="text-danger"></span>
                     </div>
-                    <div class=" card-footer ">
+                    <div class=" card-footer bg-info">
                         <div class="form-group">
                             <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-check"></i> Guardar</button>
                             <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
+                            <a asp-controller="Home" asp-action="VerDenuncia" asp-route-id="@Model.Id" class="btn btn-sm btn-secondary"><i class="oi oi-print"></i> Ver Denuncia</a>
+
                         </div>
                     </div>
                 </form>
@@ -71,7 +77,5 @@
 
     </div>
 </div>
-
-
 
 

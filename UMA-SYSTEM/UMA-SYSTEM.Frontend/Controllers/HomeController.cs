@@ -36,6 +36,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             Denuncia denuncia = new()
             {
+                Fecha = DateTime.Now,
                 Estados = await _lista.GetListaEstados(),
                 Tipos = await _lista.GetListaTipos()
             };
@@ -56,7 +57,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Denuncia creada exitosamente!!!";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("VerDenuncia");
                 }
                 else
                 {
@@ -71,6 +72,22 @@ namespace UMA_SYSTEM.Frontend.Controllers
             }
             denuncia.Estados = await _lista.GetListaEstados();
             denuncia.Tipos = await _lista.GetListaTipos();
+            return View(denuncia);
+        }
+
+        public async Task<IActionResult> VerDenuncia(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Error al obtener la denuncia.";
+                return RedirectToAction("Index");
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var denuncia = JsonConvert.DeserializeObject<Denuncia>(jsonString);
+
             return View(denuncia);
         }
 
