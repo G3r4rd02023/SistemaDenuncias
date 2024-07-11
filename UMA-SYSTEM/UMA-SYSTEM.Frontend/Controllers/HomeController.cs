@@ -57,7 +57,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Denuncia creada exitosamente!!!";
-                    return RedirectToAction("VerDenuncia");
+                    return RedirectToAction("Privacy");
                 }
                 else
                 {
@@ -73,6 +73,45 @@ namespace UMA_SYSTEM.Frontend.Controllers
             denuncia.Estados = await _lista.GetListaEstados();
             denuncia.Tipos = await _lista.GetListaTipos();
             return View(denuncia);
+        }
+
+        public IActionResult CrearSolicitud()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CrearSolicitud(Solicitud solicitud)
+        {
+            if (ModelState.IsValid)
+            {
+                solicitud.IdUsuario = 1;
+                solicitud.FechaSolicitud = DateTime.Now;
+                solicitud.FechaVencimiento = DateTime.Now.AddDays(3);
+                solicitud.FechaAprobacion = DateTime.Now.AddDays(3);
+                var json = JsonConvert.SerializeObject(solicitud);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("/api/Solicitudes/", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["AlertMessage"] = "Solicitud creada exitosamente!!!";
+                    return RedirectToAction("Privacy");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error al crear la soliictud.");
+                    TempData["ErrorMessage"] = "Ocurrió un error al intentar crear la soliictud!!!";
+                }
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                TempData["ModelErrors"] = string.Join("\n", errors);
+            }
+
+            return View(solicitud);
         }
 
         public async Task<IActionResult> VerDenuncia(int id)

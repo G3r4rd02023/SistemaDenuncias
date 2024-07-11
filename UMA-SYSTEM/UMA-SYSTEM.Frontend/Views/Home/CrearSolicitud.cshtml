@@ -1,0 +1,80 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Solicitud
+
+@{
+    ViewData["Title"] = "Create";    
+}
+
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <h4 class=" text-center"> Solicitud</h4>
+        <div class=" card">
+            <div class=" card-header text-center bg-info">
+                <img src="~/images/Alcaldia Valle.png" align="left" style="width: 50px; height: auto; border-radius: 50%; object-fit: cover;">
+                <img src="~/images/Escudo Honduras.png" align="right" style="width: 50px; height: auto; border-radius: 50%; object-fit: cover;">
+            </div>
+            <div class="card-body text-center">
+                <form asp-action="CrearSolicitud" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="DNI" class="form-control" placeholder="Número de Identidad" />
+                        <span asp-validation-for="DNI" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="NombreCompleto" class="form-control" placeholder="Nombre Completo" />
+                        <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="CantidadArboles" class="form-control" placeholder="Cantidad de arboles" />
+                        <span asp-validation-for="CantidadArboles" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="TerrenoTenencia" class="form-control" placeholder="Tenencia de terreno" />
+                        <span asp-validation-for="TerrenoTenencia" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Denominacion" class="form-control" placeholder="Denominación" />
+                        <span asp-validation-for="Denominacion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <textarea asp-for="Observaciones" class="form-control" placeholder="Observaciones"></textarea>
+                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Aldea" class="form-control" placeholder="Aldea" />
+                        <span asp-validation-for="Aldea" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Barrio" class="form-control" placeholder="Barrio" />
+                        <span asp-validation-for="Barrio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Caserio" class="form-control" placeholder="Caserío" />
+                        <span asp-validation-for="Caserio" class="text-danger"></span>
+                    </div>
+                    <div class=" card-footer bg-info">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-check"></i> Guardar</button>
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
