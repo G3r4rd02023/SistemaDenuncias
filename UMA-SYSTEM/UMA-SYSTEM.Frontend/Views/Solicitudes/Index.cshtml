@@ -1,0 +1,104 @@
+﻿@model IEnumerable<UMA_SYSTEM.Frontend.Models.Solicitud>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section Estilos {
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (TempData["AlertMessage"] != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: '¡Éxito!',
+                text: '@TempData["AlertMessage"]',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+}
+
+
+<p>
+    <a onclick="showInPopup('@Url.Action("Create", "Solicitudes", new { id = 0 }, Context.Request.Scheme)' , '')"
+       class="btn btn-sm btn-primary text-white"><i class=" oi oi-plus"></i>  Crear solicitud</a>
+</p>
+
+<div class=" card">
+    <div class=" card-header text-center bg-info text-white">
+        <h5>Listado de Solicitudes</h5>       
+    </div>
+    <div class="card-body">
+        <table id="solicitud" class="table table-hover table responsive table stripped">
+            <thead>
+                <tr>                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.DNI)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NombreCompleto)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaSolicitud)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Aldea)
+                    </th>                    
+                                    
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DNI)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NombreCompleto)
+                        </td>
+                        
+                        <td>@item.FechaSolicitud.ToString("yyyy-MM-dd")</td>                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Aldea)
+                        </td>                                              
+                        <td>
+                            <a onclick="showInPopup('@Url.Action("Details", "Solicitudes", new { id = item.Id }, Context.Request.Scheme)' ,
+                    '')" class="btn btn-outline-info btn-sm"><i class="oi oi-list"></i> </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+<partial name="_MostrarModal" />
+<partial name="_ModalEliminar" />
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/js/showmodal.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#solicitud').DataTable({
+                "language": {
+                    url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                },
+            });
+        });
+    </script>
+
+}

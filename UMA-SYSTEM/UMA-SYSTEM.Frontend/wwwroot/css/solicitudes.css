@@ -1,0 +1,145 @@
+html, body {
+    justify-content: center;
+    align-items: flex-start;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: #f0f0f0;
+    overflow: auto; /* Permitir desplazamiento en toda la ventana */
+}
+
+.container {
+    width: 21.59cm;
+    height: auto;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    background: white;
+    overflow: hidden;
+    position: relative;
+    text-align: center; /* Ocultar la barra lateral interna */
+}
+
+.pagina1, .pagina2 {
+    page-break-before: always;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.av, .eh {
+    width: 60px; /* Reduce el tamaño de las imágenes */
+    position: absolute;
+    top: 0;
+}
+
+.av {
+    left: 0;
+}
+
+.eh {
+    right: 0;
+}
+
+h2, h3, h4 {
+    text-align: center;
+    color: #6d6d6d;
+}
+
+h5 {
+    text-align: center;
+}
+
+p {
+    text-align: left;
+    letter-spacing: 1px;
+    padding: 5px;
+}
+
+span {
+    color: black;
+    background-color: black;
+    border: 5px solid black;
+}
+
+br {
+    margin: 5px;
+}
+
+/* Input styles */
+.observaciones, .observaciones2, .yo, .domicilio, .municipio, .identidad, .solicitud, .aprovechamiento, .tenencia, .denominado, .dias, .mes, .año, .ifirma, .itelefono {
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    width: 100%;
+    display: inline-block;
+}
+
+input {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.firma {
+    margin-left: 30px;
+    float: left;
+}
+
+.telefono {
+    margin-right: 30px;
+    float: right;
+}
+
+.ifirma {
+    width: auto;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    margin-left: 30px;
+    float: left;
+}
+
+.itelefono {
+    width: auto;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    margin-right: 30px;
+    float: right;
+}
+
+a {
+    border: 1px solid black;
+    border-radius: 6px;
+    color: black;
+    background-color: #f5a9a9;
+    padding: 8px;
+    text-decoration: none;
+    font-family: sans-serif;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.enviar, .imprimir {
+    border: 1px solid black;
+    border-radius: 6px;
+    color: black;
+    background-color: #76f75e;
+    padding: 8px;
+    text-decoration: none;
+    font-family: sans-serif;
+    display: inline-block;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.title {
+    clear: both;
+    padding-top: 120px; /* Adjust as necessary */
+}

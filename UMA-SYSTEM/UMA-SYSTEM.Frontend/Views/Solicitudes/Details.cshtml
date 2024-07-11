@@ -1,0 +1,88 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Solicitud
+@{
+    ViewData["Title"] = "Details";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Alcaldía Municipal De Valle de Ángeles</title>
+    <link rel="icon" href="uma.ico">
+    <link rel="stylesheet" type="text/css" href="solicitudes.css">
+</head>
+<body>
+    <div class="container">
+        <div class="pagina1">
+            <div class="col-md-12">
+                <img class="av" src="~/images/Alcaldia Valle.png" alt="Logo Alcaldía Valle" align="left" style="width: 50px; height: auto;">
+                <img class="eh" src="~/images/Escudo Honduras.png" alt="Escudo Honduras" align="right" style="width: 50px; height: auto;">
+            </div>                       
+            <div class="title text-center" >
+                <h5>ALCALDIA MUNICIPAL DE VALLE DE ANGELES</h5>
+                <h5>Departamento De Francisco Morazán, Honduras, C.A.</h5>
+                <h5>Ciudad Turística<br>Telefax: 2766-2295 / 2766-2248</h5>
+            </div>
+            <div class=" text-center">
+                <h5>SOLICITUD DE LICENCIA NO COMERCIAL 2024</h5>               
+            </div>
+            <p>
+                <br />
+                Señores: Unidad Municipal Ambiental (UMA) Valle de Ángeles, F.M <br>
+                Yo: <span class="yo"><strong>@Model.NombreCompleto</strong></span>
+                <br> Mayor de edad, hondureño, con domicilio en <span class="domicilio"><strong>@Model.Aldea</strong></span>
+                <br> Municipio de <span class="municipio">@Model.Barrio</span> Departamento de Francisco Morazán con identidad No. <span class="identidad"><strong>@Model.DNI</strong></span>
+                <br> Respetuosamente comparezco ante la Unidad Municipal Ambiental para solicitar se me autorice el corte de <span class="solicitud"><strong>@Model.CantidadArboles</strong></span>
+                <br> o aprovechamiento de <span class="aprovechamiento">@Model.CantidadArboles</span> árboles en terreno de tenencia <span class="tenencia"></span>
+                <br> denominado <span class="denominado"><strong>@Model.Denominacion</strong></span> de esta jurisdicción.
+            </p>
+            <p>
+                OBSERVACIONES:<br>
+                <textarea class="observaciones" name="observaciones" style="width: 100%; height: 100px; resize: none;">@Model.Observaciones</textarea>
+            </p>
+            <p>
+                Al jefe de la Unidad Municipal Ambiental, atentamente pido admitir la presente solicitud darle los trámites correspondientes y que se resuelva, en definitiva.
+                <br> A los Días <span class="dias"><strong>@Model.FechaSolicitud.ToString("dd")</strong></span> del mes <span class="mes"><strong>@Model.FechaSolicitud.ToString("MM")</strong></span> del año 20<span class="año"><strong>@Model.FechaSolicitud.ToString("yy")</strong></span>
+            </p>
+            <p>
+                NOTA: Se debe adjuntar a la presente solicitud la siguiente documentación:
+                <br> 1. Fotocopia de escritura de terreno o (Documento compra venta autenticada).
+                <br> 2. Plano de la propiedad.
+                <br> 3. Copia de la tarjeta de identidad.
+                <br> 4. Presentar hoja de antecedentes penales y policiales recientes (vigentes), (OBLIGATORIO).
+                <br> 5. Copia de recibos de bienes inmuebles del presente año.
+                <br> 6. Copia de impuestos personales (Valle de Ángeles del presente año).
+                <br> 7. Si es privado, autorización del dueño.
+                <br> 8. Copia del permiso de operación vigente de la persona que realizará el corte (Motosierra).
+                <br> 9. Cancelar Lps200.00 por inspección para vecinos, Lps500.00 para no vecinos y Lps500 para vecinos y Lps800.00 para no vecinos por cada árbol cortado.
+                <br> 10. Cancelar 3 árboles forestales, valor c/u Lps50.00 por cada árbol que se corte (Reposición), los que deberá sembrar dentro de su propiedad en el área verde.
+                <br> Antes de autorizar todo corte tendrá que sembrar 3 árboles nativos por cada uno cortado, deberá presentar un informe a la UMA validando que realizó la actividad.
+                <br> 11. Todos los trámites son de carácter personal, o con poder legal autorizado.
+                <br> 12. En el caso que los árboles interfieran en la construcción se debe de presentar un escrito autenticado en donde se manifieste la cantidad de árboles
+                <br> que hay dentro de la propiedad y de qué especie son, esto con el fin de que no puedan ser dañados ni cortados más de lo autorizado, así mismo deberán sembrar 3
+                <br> por cada árbol que requieran cortar antes de iniciar el proceso de construcción.
+                <br> 13. El permiso será entregado dos (2) días después de la inspección, con una vigencia de no más de tres días hábiles.
+                <br> 14. Si la propiedad se encuentra dentro de la zona de amortiguamiento del Parque Nacional La Tigra, deberá contar con el dictamen de la Fundación, en el caso que
+                <br> la zona esté fuera del perímetro urbano deberá tramitar permiso en "ICF".
+            </p>
+            <p>
+                <label for="ifirma">FIRMA DEL SOLICITANTE:</label>
+                <span class="ifirma" id="ifirma"><strong>@Model.NombreCompleto</strong></span>
+            </p>
+            <p>
+                <label for="itelefono">No. DE TELÉFONO:</label>
+                <span class="itelefono" id="itelefono"></span>
+            </p>
+            <div class="buttons">
+                <a asp-action="Index" class="btn btn-sm btn-primary"><i class="oi oi-arrow-thick-left"></i> Volver</a>
+                <button type="submit" class="btn btn-sm btn-success">
+                    <i class="oi oi-check"></i> Enviar Solicitud
+                </button>
+                <a asp-action="Index" class="btn btn-sm btn-secondary"><i class="oi oi-print"></i> Imprimir</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
