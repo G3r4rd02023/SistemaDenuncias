@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Rotativa.AspNetCore;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
 
@@ -88,6 +89,27 @@ namespace UMA_SYSTEM.Frontend.Controllers
             var solicitud = JsonConvert.DeserializeObject<Solicitud>(jsonString);
 
             return View(solicitud);
+        }
+
+        public async Task<IActionResult> GenerarPdf(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/Solicitudes/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Error al obtener la solicitud.";
+                return RedirectToAction("Index");
+            }
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var solicitud = JsonConvert.DeserializeObject<Solicitud>(jsonString);
+
+            return new ViewAsPdf("GenerarPdf", solicitud)
+            {
+                FileName = $"Solicitud {solicitud!.Id}.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                PageSize = Rotativa.AspNetCore.Options.Size.A4
+            };
         }
     }
 }

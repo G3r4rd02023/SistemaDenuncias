@@ -1,5 +1,4 @@
 ﻿@model UMA_SYSTEM.Frontend.Models.Denuncia
-
 @{
     ViewData["Title"] = "Details";
     Layout = null;
@@ -58,7 +57,10 @@
         <button type="submit" class="btn btn-sm btn-success">
             <i class="oi oi-check"></i> Enviar Denuncia
         </button>
-        <a asp-action="Index" class="btn btn-sm btn-secondary"><i class="oi oi-print"></i> Imprimir</a>
+        <a asp-controller="Denuncias"
+           asp-action="GenerarPdf"
+           asp-route-id="@Model.Id"
+           class="btn btn-sm btn-info text-white mb-2">Generar Pdf</a>
     </div>
 
     <script>

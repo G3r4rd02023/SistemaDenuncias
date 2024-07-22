@@ -36,9 +36,10 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             Denuncia denuncia = new()
             {
-                Fecha = DateTime.Now,
-                Estados = await _lista.GetListaEstados(),
-                Tipos = await _lista.GetListaTipos()
+                Fecha = DateTime.Now,                
+                Tipos = await _lista.GetListaTipos(),
+                IdEstado = 1,
+                Municipio = "Valle de Angeles"
             };
             return View(denuncia);
         }
@@ -49,6 +50,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
             if (ModelState.IsValid)
             {
                 denuncia.Fecha = DateTime.Now;
+                denuncia.IdEstado = 1;
+                denuncia.Municipio = "Valle de Anegeles";
                 var json = JsonConvert.SerializeObject(denuncia);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -70,7 +73,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 TempData["ModelErrors"] = string.Join("\n", errors);
             }
-            denuncia.Estados = await _lista.GetListaEstados();
+            
             denuncia.Tipos = await _lista.GetListaTipos();
             return View(denuncia);
         }
