@@ -21,7 +21,7 @@ namespace UMA_SYSTEM.Backend.Controllers
         {
             return Ok(await _context.Denuncias
                 .Include(d => d.TipoDenuncia)
-                .Include(d => d.Estado)
+                .Include(d => d.Estado)                
                 .ToListAsync());
         }
 
@@ -50,15 +50,13 @@ namespace UMA_SYSTEM.Backend.Controllers
         {
             var denuncia = await _context.Denuncias
                 .Include(x => x.TipoDenuncia)
-                .Include(x => x.Estado)
+                .Include(x => x.Estado)                
                 .SingleOrDefaultAsync(c => c.Id == id);
             if (denuncia == null)
             {
                 return NotFound();
             }
             return Ok(denuncia);
-        }
-
-
+        }       
     }
 }

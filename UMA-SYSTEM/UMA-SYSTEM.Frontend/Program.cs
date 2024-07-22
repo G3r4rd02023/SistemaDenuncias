@@ -1,3 +1,4 @@
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using UMA_SYSTEM.Frontend.Services;
 
@@ -10,7 +11,7 @@ namespace UMA_SYSTEM.Frontend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(); 
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IBitacoraService, BitacoraService>();
             builder.Services.AddScoped<IParametroService, ParametroService>();
@@ -28,6 +29,15 @@ namespace UMA_SYSTEM.Frontend
               options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
            });
 
+            var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
+
+            var cloudinary = new Cloudinary(new Account(
+                cloudinaryConfig["CloudName"],
+                cloudinaryConfig["ApiKey"],
+                cloudinaryConfig["ApiSecret"]
+                ));
+
+            builder.Services.AddSingleton(cloudinary);
 
             var app = builder.Build();
 

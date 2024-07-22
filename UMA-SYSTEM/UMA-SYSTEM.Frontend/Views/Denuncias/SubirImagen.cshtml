@@ -1,0 +1,16 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Anexo
+@{
+    ViewData["Title"] = "SubirImagen";
+}
+
+<h5>SubirImagen</h5>
+
+<form asp-controller="Denuncias" asp-action="SubirImagen" method="post" enctype="multipart/form-data">
+    <input asp-for="IdDenuncia" type="hidden"/>
+    <input asp-for="Denuncia" type="hidden"/>
+    <div class=" form-group">
+        <label> Agregar Imagen</label>
+        <input type="file" name="file" class="form-control"  />
+    </div>
+    <button type="submit" class=" btn btn-primary">Agregar imagen</button>
+</form>

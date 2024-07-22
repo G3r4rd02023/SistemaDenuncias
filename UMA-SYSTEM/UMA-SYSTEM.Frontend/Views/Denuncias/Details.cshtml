@@ -4,6 +4,23 @@
     Layout = null;
 }
 
+<style>
+    .image-gallery {
+        margin-top: 20px;
+    }
+
+    .image-gallery img {
+            width: 100px;
+            height: auto;
+            margin: 5px;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+     }
+
+    .image-gallery img:hover {
+        transform: scale(1.1);
+    }
+</style>
 
 <!DOCTYPE html>
 <html>
@@ -61,8 +78,16 @@
            asp-action="GenerarPdf"
            asp-route-id="@Model.Id"
            class="btn btn-sm btn-info text-white mb-2">Generar Pdf</a>
+        <a asp-controller="Denuncias"
+           asp-action="SubirImagen"
+           asp-route-id="@Model.Id"
+           class="btn btn-sm btn-info text-white mb-2">Adjuntar Imagen</a>
+        <a asp-controller="Imagenes"
+           asp-action="VerImagenes"
+           asp-route-id="@Model.Id"
+           class="btn btn-sm btn-info text-white mb-2">Ver Imagenes</a>
     </div>
-
+    
     <script>
         function printPage() {
             const printArea = document.getElementById('printArea');

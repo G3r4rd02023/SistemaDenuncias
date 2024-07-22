@@ -42,5 +42,6 @@ namespace UMA_SYSTEM.Frontend.Models
         [NotMapped]
         public IEnumerable<SelectListItem>? Tipos { get; set; }
 
+        public List<Anexo>? Imagenes { get; set; }
     }
 }
