@@ -74,15 +74,15 @@
                 <label for="itelefono">No. DE TELÉFONO:</label>
                 <span class="itelefono" id="itelefono"></span>
             </p>
-            <div class="buttons">
-                <a asp-action="Index" class="btn btn-sm btn-primary"><i class="oi oi-arrow-thick-left"></i> Volver</a>
-                <button type="submit" class="btn btn-sm btn-success">
-                    <i class="oi oi-check"></i> Enviar Solicitud
+            <div class="buttons text-center">
+                <a asp-action="Index" class="btn btn-sm btn-outline-primary"><i class="oi oi-arrow-thick-left"></i> Volver</a>
+                <button type="submit" class="btn btn-sm btn-outline-success">
+                    <i class="oi oi-check"></i> Aprobar Solicitud
                 </button>
                 <a asp-controller="Solicitudes"
                    asp-action="GenerarPdf"
                    asp-route-id="@Model.Id"
-                   class="btn btn-sm btn-info text-white mb-2">Generar Pdf</a>
+                   class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-file-pdf"></i> Generar Pdf</a>
             </div>
         </div>
     </div>

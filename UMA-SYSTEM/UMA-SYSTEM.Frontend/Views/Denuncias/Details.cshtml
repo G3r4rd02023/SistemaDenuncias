@@ -4,6 +4,8 @@
     Layout = null;
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <style>
     .image-gallery {
         margin-top: 20px;
@@ -54,13 +56,7 @@
         Manifesto que se sucitaron los siguientes hechos:
         <br>
         <textarea class="hechos" rows="10" type="text" name="DescripcionHechos" placeholder="Dos hombres con motosierras estan cortando varios arboles en la zona, varios vehiculos de carga.">@Model.DescripcionHechos</textarea>
-        <br><br>
-        <form id="imageForm" action="procedar_imagen.php" method="post" enctype="multipart/form-data">
-            <label for="imagen">Seleciona una imagen:</label>
-            <input type="file" id="imagen" name="imagen" accept="image/*">
-            <input type="submit" onclick="alert('¡ ADJUNTO IMAGEN CON EXITO !'); return false;" value="subir imagen" name="">
-        </form>
-        <br><br>
+        <br><br>            
         <b>Por lo antes expuesto el Denunciante pide se pactique la inspeccion de rigor al lugar de los hechos por medio de los tecnicos de la Unidad Municipal Ambiental para verificar los hechos manifestados, finalmente que se proceda confome a lo establecido en la Legislacion Abiental y Municipal vigente.</b>
         <br><br>
         Denuncia Interpuesta:   Online  <input class="online" type="checkbox" name="Online"> Personalmente <input class="personalmente" type="checkbox" name="Personalmente">
@@ -70,33 +66,22 @@
         
     </div>
     <div class="buttons">
-        <a asp-action="Index" class="btn btn-sm btn-primary"><i class="oi oi-arrow-thick-left"></i> Volver</a>
-        <button type="submit" class="btn btn-sm btn-success">
-            <i class="oi oi-check"></i> Enviar Denuncia
+        <a asp-action="Index" class="btn btn-sm btn-outline-primary"><i class="oi oi-arrow-thick-left"></i> Volver</a>
+        <button type="submit" class="btn btn-sm btn-outline-success">
+            <i class="oi oi-check"></i> Aprobar Denuncia
         </button>
         <a asp-controller="Denuncias"
            asp-action="GenerarPdf"
            asp-route-id="@Model.Id"
-           class="btn btn-sm btn-info text-white mb-2">Generar Pdf</a>
-        <a asp-controller="Denuncias"
-           asp-action="SubirImagen"
-           asp-route-id="@Model.Id"
-           class="btn btn-sm btn-info text-white mb-2">Adjuntar Imagen</a>
+           class="btn btn-outline-danger btn-sm mb-2"><i class="fa-solid fa-file-pdf"></i> Generar Pdf</a>
+        <a onclick="showInPopup('@Url.Action("SubirImagen", "Denuncias", new { id = @Model.Id }, Context.Request.Scheme)' ,
+                    '')" class="btn btn-outline-info btn-sm"><i class="oi oi-data-transfer-upload"></i> Adjuntar imagen</a>
         <a asp-controller="Imagenes"
            asp-action="VerImagenes"
            asp-route-id="@Model.Id"
-           class="btn btn-sm btn-info text-white mb-2">Ver Imagenes</a>
+           class="btn btn-outline-secondary btn-sm mb-2"><i class="oi oi-image"></i> Ver Imagenes</a>
     </div>
-    
-    <script>
-        function printPage() {
-            const printArea = document.getElementById('printArea');
-            const imageForm = document.getElementById('imageForm');
-            imageForm.style.display = 'none'; // Ocultar formulario de imagen al imprimir
-            window.print();
-            imageForm.style.display = 'block'; // Mostrar formulario de imagen nuevamente después de imprimir
-        }
-    </script>
+       
 </body>
 </html>
 

@@ -1,16 +1,37 @@
 ﻿@model UMA_SYSTEM.Frontend.Models.Anexo
 @{
     ViewData["Title"] = "SubirImagen";
+    Layout = null;
 }
 
-<h5>SubirImagen</h5>
+<style>
+    .container {
+        max-width: 600px;
+    }
 
-<form asp-controller="Denuncias" asp-action="SubirImagen" method="post" enctype="multipart/form-data">
-    <input asp-for="IdDenuncia" type="hidden"/>
-    <input asp-for="Denuncia" type="hidden"/>
-    <div class=" form-group">
-        <label> Agregar Imagen</label>
-        <input type="file" name="file" class="form-control"  />
-    </div>
-    <button type="submit" class=" btn btn-primary">Agregar imagen</button>
-</form>
+    h5 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+</style>
+
+<div class="container mt-4">
+    <h5>Subir Imagen</h5>
+    <form asp-controller="Denuncias" asp-action="SubirImagen" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow-sm">
+        <input asp-for="IdDenuncia" type="hidden" />
+        <input asp-for="Denuncia" type="hidden" />
+        <div class="form-group">
+            <label for="file">Agregar Imagen</label>
+            <input type="file" name="file" id="file" class="form-control-file" />
+        </div>
+        <div class="d-grid gap-2 mb-2 mt-2">
+            <button class="btn btn-success" type="submit">Guardar</button>
+        </div>
+        <a asp-action="Index" class="btn btn-sm btn-primary"><i class="oi oi-arrow-thick-left"></i> Cancelar</a>
+    </form>
+</div>
+
