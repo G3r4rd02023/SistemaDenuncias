@@ -42,7 +42,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 Fecha = DateTime.Now,
                 Tipos = await _lista.GetListaTipos(),
                 IdEstado = 3,
-                Municipio = "Valle de Angeles"
+                Municipio = "Valle de Angeles",
+                NumExpediente = await _lista.ObtenerCodigo()
             };
 
             return View(denuncia);
@@ -64,6 +65,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
                 var urlImagen = uploadResult.SecureUrl.ToString();
 
+               
                 denuncia.Fecha = DateTime.Now;
                 denuncia.IdEstado = 3;
                 denuncia.Municipio = "Valle de Angeles";

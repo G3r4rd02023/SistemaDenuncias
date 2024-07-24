@@ -7,6 +7,8 @@ namespace UMA_SYSTEM.Frontend.Services
         Task<IEnumerable<SelectListItem>> GetListaEstados();
 
         Task<IEnumerable<SelectListItem>> GetListaTipos();
-        
+
+        Task<string> ObtenerCodigo();
+
     }
 }

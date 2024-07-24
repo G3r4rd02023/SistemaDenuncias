@@ -14,11 +14,7 @@
                 <form asp-action="CrearDenuncia" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input asp-for="IdEstado" type="hidden"/>
-                    <div class="form-group">
-                        <label></label>
-                        <input asp-for="NumExpediente" class="form-control" placeholder="No Expediente" />
-                        <span asp-validation-for="NumExpediente" class="text-danger"></span>
-                    </div>
+                    <input asp-for="NumExpediente" type="hidden" />
                     <div class="form-group">
                         <label></label>
                         <select asp-for="IdTipoDenuncia" asp-items="Model.Tipos" class="form-control"></select>

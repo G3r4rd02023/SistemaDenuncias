@@ -27,7 +27,6 @@ namespace UMA_SYSTEM.Frontend.Services
             }
             return "Parametro no encontrado";
         }
-
        
     }
 }

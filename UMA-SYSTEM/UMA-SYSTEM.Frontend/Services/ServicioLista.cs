@@ -61,5 +61,20 @@ namespace UMA_SYSTEM.Frontend.Services
 
             return [];
         }
+
+        public async Task<string> ObtenerCodigo()
+        {
+            var response = await _httpClient.GetAsync("/api/Denuncias");
+            var content = await response.Content.ReadAsStringAsync();
+            var denuncias = JsonConvert.DeserializeObject<IEnumerable<Denuncia>>(content);
+            var lastCodigo = denuncias!.OrderByDescending(x => x.Id).Select(c => c.NumExpediente).FirstOrDefault();
+            int lastNumber = 0;
+            if (!string.IsNullOrEmpty(lastCodigo) && lastCodigo.Length > 2)
+            {
+                int.TryParse(lastCodigo.Substring(2), out lastNumber);
+            }
+            var codigo = $"E-{(lastNumber + 1).ToString("D5")}";
+            return codigo;
+        }
     }
 }

@@ -6,5 +6,7 @@ namespace UMA_SYSTEM.Frontend.Services
     {
         Task<string> ObtenerValor(string nombre);
 
+        
+
     }
 }

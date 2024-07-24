@@ -40,20 +40,32 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> Create()
         {
-            Denuncia denuncia = new()
+            DenunciaAnonimaVM denuncia = new()
             {
                 Estados = await _lista.GetListaEstados(),
-                Tipos = await _lista.GetListaTipos()
+                Tipos = await _lista.GetListaTipos(),
+                NumExpediente = await _lista.ObtenerCodigo(),                
             }; 
             return View(denuncia);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Denuncia denuncia)
+        public async Task<IActionResult> Create(DenunciaAnonimaVM denuncia, IFormFile file)
         {
             if (ModelState.IsValid)
             {
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(file.FileName, file.OpenReadStream()),
+                    AssetFolder = "umasystem"
+                };
+
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                var urlImagen = uploadResult.SecureUrl.ToString();
+
+                denuncia.URLImagen = urlImagen;
                 denuncia.Fecha = DateTime.Now;
+                denuncia.Municipio = "Valle de Angeles";
                 var json = JsonConvert.SerializeObject(denuncia);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
