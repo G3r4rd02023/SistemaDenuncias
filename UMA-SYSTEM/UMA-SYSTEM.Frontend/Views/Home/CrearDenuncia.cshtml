@@ -1,4 +1,4 @@
-﻿@model UMA_SYSTEM.Frontend.Models.Denuncia
+﻿@model UMA_SYSTEM.Frontend.Models.DenunciaAnonimaVM
 @{
     ViewData["Title"] = "Create";   
 }
@@ -11,7 +11,7 @@
                 <img src="~/images/Escudo Honduras.png" align="right" style="width: 50px; height: auto; border-radius: 50%; object-fit: cover;">
             </div>
             <div class=" card-body text-center">
-                <form asp-action="CrearDenuncia" method="post">
+                <form asp-action="CrearDenuncia" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input asp-for="IdEstado" type="hidden"/>
                     <div class="form-group">
@@ -48,12 +48,16 @@
                         <label></label>
                         <input asp-for="Caserio" class="form-control" placeholder="Caserío" />
                         <span asp-validation-for="Caserio" class="text-danger"></span>
-                    </div>                   
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen</label>
+                        <input type="file" class="form-control mb-3" name="file"> 
+                        <span asp-validation-for="URLImagen" class="text-danger"></span>
+                    </div>
                     <div class=" card-footer bg-info">
                         <div class="form-group">
                             <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-check"></i> Guardar</button>
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
-                            <a asp-controller="Home" asp-action="VerDenuncia" asp-route-id="@Model.Id" class="btn btn-sm btn-secondary"><i class="oi oi-print"></i> Ver Denuncia</a>
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>                          
                         </div>
                     </div>
                 </form>

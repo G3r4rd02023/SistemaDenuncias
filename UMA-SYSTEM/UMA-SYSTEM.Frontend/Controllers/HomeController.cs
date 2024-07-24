@@ -1,7 +1,8 @@
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
 using UMA_SYSTEM.Frontend.Services;
@@ -13,13 +14,15 @@ namespace UMA_SYSTEM.Frontend.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IServicioLista _lista;
         private readonly HttpClient _httpClient;
+        private readonly Cloudinary _cloudinary;
 
-        public HomeController(ILogger<HomeController> logger, IServicioLista lista, IHttpClientFactory httpClientFactory)
+        public HomeController(ILogger<HomeController> logger, IServicioLista lista, IHttpClientFactory httpClientFactory, Cloudinary cloudinary)
         {
             _logger = logger;
             _lista = lista;
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _cloudinary = cloudinary;
         }
 
         public IActionResult Index()
@@ -34,27 +37,41 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> CrearDenuncia()
         {
-            Denuncia denuncia = new()
+            var denuncia = new DenunciaAnonimaVM()
             {
-                Fecha = DateTime.Now,                
+                Fecha = DateTime.Now,
                 Tipos = await _lista.GetListaTipos(),
-                IdEstado = 1,
+                IdEstado = 3,
                 Municipio = "Valle de Angeles"
             };
+
             return View(denuncia);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> CrearDenuncia(Denuncia denuncia)
+        public async Task<IActionResult> CrearDenuncia(DenunciaAnonimaVM denuncia, IFormFile file)
         {
             if (ModelState.IsValid)
             {
+
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(file.FileName, file.OpenReadStream()),
+                    AssetFolder = "umasystem"
+                };
+
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                var urlImagen = uploadResult.SecureUrl.ToString();
+
                 denuncia.Fecha = DateTime.Now;
-                denuncia.IdEstado = 1;
-                denuncia.Municipio = "Valle de Anegeles";
+                denuncia.IdEstado = 3;
+                denuncia.Municipio = "Valle de Angeles";
+                denuncia.URLImagen = urlImagen;
+
+
                 var json = JsonConvert.SerializeObject(denuncia);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-
                 var response = await _httpClient.PostAsync("/api/Denuncias/", content);
 
                 if (response.IsSuccessStatusCode)
@@ -73,7 +90,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 TempData["ModelErrors"] = string.Join("\n", errors);
             }
-            
+
             denuncia.Tipos = await _lista.GetListaTipos();
             return View(denuncia);
         }

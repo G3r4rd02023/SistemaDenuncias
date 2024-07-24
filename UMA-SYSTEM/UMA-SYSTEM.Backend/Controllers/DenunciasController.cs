@@ -26,16 +26,28 @@ namespace UMA_SYSTEM.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(Denuncia denuncia)
+        public async Task<IActionResult> PostAsync(DenunciaAnonimaVM denuncia)
         {
             var estado = _context.Estados.FirstOrDefault(e => e.Id == denuncia.IdEstado);
             var tipo = _context.TiposDenuncia.FirstOrDefault(e => e.Id == denuncia.IdTipoDenuncia);
-
+            
             if (estado != null && tipo != null)
             {
+                
                 denuncia.TipoDenuncia = tipo;
                 denuncia.Estado = estado;
                 _context.Add(denuncia);
+                await _context.SaveChangesAsync();
+                var nuevaDenuncia = _context.Denuncias.FirstOrDefault(d => d.Id == denuncia.Id);
+                var anexo = new Anexo()
+                {
+                    Denuncia = nuevaDenuncia,
+                    IdDenuncia = nuevaDenuncia!.Id,
+                    Fecha = DateTime.Now,
+                    URL = denuncia.URLImagen,
+                    NombreArchivo = denuncia.NombreArchivo
+                };
+                _context.Anexos.Add(anexo);
                 await _context.SaveChangesAsync();
                 return Ok();
             }

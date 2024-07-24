@@ -33,6 +33,6 @@ namespace UMA_SYSTEM.Backend.Models
         public int IdTipoDenuncia { get; set; }
         public Estado? Estado {get; set; }
         public int IdEstado { get; set; }
-       
+        
     }
 }
