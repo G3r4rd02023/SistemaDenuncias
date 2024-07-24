@@ -45,6 +45,21 @@
     </script>
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: '¡Error!',
+                text: '@TempData["ErrorMessage"]',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+}
+
+
 
 <p>
     <a onclick="showInPopup('@Url.Action("Create", "Solicitudes", new { id = 0 }, Context.Request.Scheme)' , '')"

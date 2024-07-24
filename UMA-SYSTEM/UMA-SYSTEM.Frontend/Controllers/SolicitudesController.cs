@@ -61,8 +61,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     return RedirectToAction("Index");
                 }
                 else
-                {
-                    ModelState.AddModelError(string.Empty, "Error al crear la soliictud.");
+                {                   
                     TempData["ErrorMessage"] = "Ocurrió un error al intentar crear la soliictud!!!";
                 }
             }
@@ -70,8 +69,9 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 TempData["ModelErrors"] = string.Join("\n", errors);
+                ViewData["UseLayout"] = true;
             }
-            
+
             return View(solicitud);
         }
 

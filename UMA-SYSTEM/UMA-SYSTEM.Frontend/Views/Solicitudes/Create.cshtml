@@ -1,10 +1,34 @@
 ﻿@model UMA_SYSTEM.Frontend.Models.Solicitud
 
 @{
-    ViewData["Title"] = "Create";
-    Layout = null;
+    ViewData["Title"] = "Create";   
+    if (ViewData["UseLayout"] != null && (bool)ViewData["UseLayout"]!)
+    {
+        Layout = "_Layout"; 
+    }
+    else
+    {
+        Layout = null;
+    }
 }
 
+
+
+
+
+@if (TempData["ModelErrors"] != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: '¡Error!',
+                text: '@TempData["ModelErrors"]',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+}
 
 <hr />
 <div class="row">
@@ -19,8 +43,9 @@
                 <form asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>                    
                     <div class="form-group">
-                        <label></label>
-                        <input asp-for="DNI" class="form-control" placeholder="Número de Identidad"/>
+                        <label asp-for="DNI"></label>
+                        <input asp-for="DNI" class="form-control" placeholder="Número de Identidad" aria-describedby="dniHelp" />
+                        <small id="dniHelp" class="form-text text-muted">Ejemplo: 0801-2000-12345</small>
                         <span asp-validation-for="DNI" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -74,6 +99,5 @@
         </div>       
     </div>
 </div>
-
 
 
