@@ -22,9 +22,15 @@
 <h4 class=" text-center mt-3">Evidencia de la denuncia</h4>
 <hr />
 
+
 <div class=" row">
     @if (Model.Count() > 0)
     {
+        <div class="form-group">
+            <a onclick="showInPopup('@Url.Action("SubirImagen", "Denuncias", new { id = Model.FirstOrDefault()?.Denuncia!.Id })', 'Subir Imagen')" class="btn btn-outline-info btn-sm">
+                <i class="oi oi-data-transfer-upload"></i> Adjuntar imagen
+            </a>
+        </div>
         <div class="row">
             @foreach (var imagen in Model)
             {
@@ -40,15 +46,26 @@
                             <p class="card-text">Descripcion: @imagen.Denuncia!.DescripcionHechos</p>
                         </div>
                         <div class="card-footer text-center">
-                        </div>
+                        </div>                      
                     </div>
-                </div>
+                </div>              
             }
         </div>
+       
     }
     else
     {
         <h3>No hay imagenes disponibles</h3>
+       
     }
 </div>
+<div>
+    <a asp-action="Details" asp-controller="Denuncias" class="btn btn-sm btn-outline-primary"><i class="oi oi-arrow-thick-left"></i> Volver</a>
+</div>
 
+<partial name="_MostrarModal" />
+
+@section Scripts{
+
+    <script src="~/js/showmodal.js"></script>
+}

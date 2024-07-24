@@ -183,7 +183,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
             if (responseImg.IsSuccessStatusCode)
             {               
                 TempData["AlertMessage"] = "Imagen agregada exitosamente!!!";
-                return RedirectToAction("Index");
+                return RedirectToAction("VerImagenes","Imagenes");
             }
             else
             {
