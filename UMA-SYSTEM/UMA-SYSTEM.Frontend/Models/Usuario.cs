@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UMA_SYSTEM.Frontend.Models
 {
@@ -35,5 +37,8 @@ namespace UMA_SYSTEM.Frontend.Models
         public int RolId { get; set; }
         public Rol? Rol { get; set; }
         public string FullName => $"{Nombre} {Apellidos}";
+
+        [NotMapped]
+        public IEnumerable<SelectListItem>? Roles { get; set; }
     }
 }

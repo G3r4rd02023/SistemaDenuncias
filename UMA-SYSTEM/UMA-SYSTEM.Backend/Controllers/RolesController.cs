@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UMA_SYSTEM.Backend.Data;
+using UMA_SYSTEM.Backend.Models;
 
 namespace UMA_SYSTEM.Backend.Controllers
 {
@@ -32,6 +33,25 @@ namespace UMA_SYSTEM.Backend.Controllers
             }
             return Ok(role);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAsync(int id, [FromBody] Usuario usuario)
+        {
+            if (id != usuario.Id)
+            {
+                return BadRequest();
+            }
+
+            var usuarioExistente = await _context.Usuarios.FindAsync(id);
+            if(usuarioExistente == null)
+            {
+                return NotFound();
+            }
+           
+            usuarioExistente.RolId = usuario.RolId;           
+            await _context.SaveChangesAsync();
+            return NoContent();
+        } 
 
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using UMA_SYSTEM.Frontend.Services;
-using UMA_SYSTEM.Frontend.Models;
 using System.Text;
+using UMA_SYSTEM.Frontend.Models;
+using UMA_SYSTEM.Frontend.Services;
 
 namespace UMA_SYSTEM.Frontend.Controllers
 {
@@ -10,12 +10,14 @@ namespace UMA_SYSTEM.Frontend.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly IBitacoraService _bitacora;
+        private readonly IServicioLista _lista;
 
-        public UsuariosController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService)
+        public UsuariosController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService, IServicioLista lista)
         {
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _bitacora = bitacoraService;
+            _lista = lista;
         }
 
         public async Task<IActionResult> Index()
@@ -99,7 +101,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public async Task<IActionResult> Edit(EditarUsuarioVM model)
         {
             if (ModelState.IsValid)
-            {               
+            {
                 var json = JsonConvert.SerializeObject(model);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -108,7 +110,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Usuario actualizado exitosamente!!!";
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -207,5 +209,65 @@ namespace UMA_SYSTEM.Frontend.Controllers
             }
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var response = await _httpClient.GetAsync($"/api/Usuarios/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Error al obtener el usuario.";
+                return RedirectToAction("Index");
+
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var user = JsonConvert.DeserializeObject<Usuario>(content);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var usuario = new Usuario()
+                {
+                    Apellidos = user.Apellidos,
+                    Contraseña = user.Contraseña,
+                    FechaCreacion = user.FechaCreacion,
+                    FechaVencimiento = user.FechaVencimiento,
+                    DNI = user.DNI,
+                    Email = user.Email,
+                    EstadoUsuario = user.EstadoUsuario,
+                    Nombre  = user.Nombre,
+                    NumeroIntentos = user.NumeroIntentos,
+                    Rol = user.Rol,
+                    RolId = user.RolId,
+                    Roles = await _lista.GetListaRoles()
+                };
+
+                return View(usuario);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Details(int id, Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                var json = JsonConvert.SerializeObject(usuario);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync($"/api/Roles/{id}", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["AlertMessage"] = "El rol ha sido actualizado Exitosamente";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ocurrio un error al actualizar el rol";
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(usuario);
+        }
     }
 }

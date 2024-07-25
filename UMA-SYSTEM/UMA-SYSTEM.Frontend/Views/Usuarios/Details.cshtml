@@ -1,0 +1,65 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Usuario
+@{
+    ViewData["Title"] = "Details";
+    Layout = null;
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header text-center">
+            <img src="/images/uma.png" style="width: 100px; height: auto;" />
+            <h5>Mantenimiento </h5>
+        </div>
+        <div class="card-body text-success">          
+            <form asp-action="Details" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="EstadoUsuario" />
+                <input type="hidden" asp-for="Contraseña" />
+                <input type="hidden" asp-for="Nombre" />
+                <input type="hidden" asp-for="Apellidos"/>
+                <div class="form-group">
+                    <label>Numero de identidad</label>
+                    <input asp-for="DNI" class="form-control" readonly/>
+                    <span asp-validation-for="DNI" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input asp-for="FullName" class="form-control"  readonly/>
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Fecha de creacion</label>
+                    <input asp-for="FechaCreacion" class="form-control"  readonly/>
+                    <span asp-validation-for="FechaCreacion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input asp-for="Email" class="form-control"  type="email" readonly/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select asp-for="RolId" asp-items="Model.Roles" class="form-control"></select>
+                    <span asp-validation-for="RolId" class="text-danger"></span>
+                </div>
+               
+                <div class="card-footer text-center">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="oi oi-check"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">
+                            <i class="oi oi-arrow-thick-left"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

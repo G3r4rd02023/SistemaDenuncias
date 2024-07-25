@@ -62,6 +62,30 @@ namespace UMA_SYSTEM.Frontend.Services
             return [];
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetListaRoles()
+        {
+            var response = await _httpClient.GetAsync("/api/Roles");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var roles = JsonConvert.DeserializeObject<IEnumerable<Rol>>(content);
+                var listaRoles = roles!.Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Descripcion
+                }).ToList();
+
+                listaRoles.Insert(0, new SelectListItem
+                {
+                    Value = "",
+                    Text = "Seleccione el rol"
+                });
+                return listaRoles;
+            }
+
+            return [];
+        }
+
         public async Task<string> ObtenerCodigo()
         {
             var response = await _httpClient.GetAsync("/api/Denuncias");
