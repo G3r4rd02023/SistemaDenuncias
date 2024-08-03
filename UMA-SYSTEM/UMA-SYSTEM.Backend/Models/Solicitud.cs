@@ -15,6 +15,14 @@ namespace UMA_SYSTEM.Backend.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string NombreCompleto { get; set; } = null!;
 
+        [MaxLength(20, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string Telefono { get; set; } = null!;
+
+        [MaxLength(255, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string? Correo { get; set; } = null!;
+
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [Range(1, int.MaxValue, ErrorMessage = "El campo {0} debe ser un número entero positivo.")]
         public int CantidadArboles { get; set; }

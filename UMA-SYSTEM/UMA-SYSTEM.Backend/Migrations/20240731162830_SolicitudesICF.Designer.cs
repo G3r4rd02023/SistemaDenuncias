@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UMA_SYSTEM.Backend.Data;
 
@@ -11,9 +12,11 @@ using UMA_SYSTEM.Backend.Data;
 namespace UMA_SYSTEM.Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240731162830_SolicitudesICF")]
+    partial class SolicitudesICF
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -357,104 +360,6 @@ namespace UMA_SYSTEM.Backend.Migrations
                     b.ToTable("Solicitudes");
                 });
 
-            modelBuilder.Entity("UMA_SYSTEM.Backend.Models.SolicitudICF", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("DNI")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Denominacion")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Domicilio")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<int?>("EstadoId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ExtensionSuperficial")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdEstado")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LimiteEste")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("LimiteNorte")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("LimiteOeste")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("LimiteSur")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<decimal>("MetrosCubicos")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<string>("NombreCompleto")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Observaciones")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("PieTablar")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SitioTenencia")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("TipoMadera")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EstadoId");
-
-                    b.ToTable("SolicitudesICF");
-                });
-
             modelBuilder.Entity("UMA_SYSTEM.Backend.Models.TipoDenuncia", b =>
                 {
                     b.Property<int>("Id")
@@ -602,15 +507,6 @@ namespace UMA_SYSTEM.Backend.Migrations
                         .HasForeignKey("UsuarioId");
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("UMA_SYSTEM.Backend.Models.SolicitudICF", b =>
-                {
-                    b.HasOne("UMA_SYSTEM.Backend.Models.Estado", "Estado")
-                        .WithMany()
-                        .HasForeignKey("EstadoId");
-
-                    b.Navigation("Estado");
                 });
 
             modelBuilder.Entity("UMA_SYSTEM.Backend.Models.Usuario", b =>

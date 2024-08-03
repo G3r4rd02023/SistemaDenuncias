@@ -1,0 +1,76 @@
+﻿@model UMA_SYSTEM.Frontend.Models.SolicitudICF
+@{
+    ViewData["Title"] = "Details";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    
+    <style>
+        .text-center {
+            text-align: center;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .card-title {
+            margin-bottom: 20px;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-title">
+            <img class="av" src="~/images/logoicf.jpeg" alt="Logo Alcaldía Valle" align="left" style="width: 150px; height: auto;">
+            <img class="eh" src="~/images/escudoicf.jpeg" alt="Escudo Honduras" align="right" style="width: 100px; height: auto;">
+        </div>
+        <div class="card-body">
+            <h6 class="text-center">Solicitud de Licencia para Aprovechamiento No Comercial</h6>
+
+            <p>
+                Yo, @Model.NombreCompleto mayor de edad, hondureño, con domicilio en el (la) @Model.Domicilio departamento de Francisco Morazan,
+                municipio de Valle de angeles con identidad número @Model.DNI, respetuosamente comparezco ante el Instituto de Conservación Forestal,
+                a solicitar se me autorice el aprovechamiento de @Model.PieTablar (pt ___ m<sup>3</sup>) de madera @Model.TipoMadera
+                en el sitio de tenencia denominado @Model.SitioTenencia jurisdicción del municipio de Valle de angeles,
+                departamento de Francisco Morazán, con una extensión superficial de @Model.ExtensionSuperficial m<sup>2</sup>,
+                con los siguientes límites:
+            </p>
+
+            <p>
+                Al norte: @Model.LimiteNorte<br>
+                Al sur: @Model.LimiteSur<br>
+                Al este: @Model.LimiteEste<br>
+                Al oeste: @Model.LimiteOeste
+            </p>
+
+            <p>Observaciones: @Model.Observaciones</p>
+
+            <p>Al Jefe de la Región Forestal de Francisco Morazán, atentamente pido admitir la presente solicitud previa a los trámites correspondientes, se resuelva en definitiva.</p>
+
+            <p>Fecha: @Model.Fecha.ToString("dd/MM/yyyy")</p>
+
+            <p class="text-center">
+                Firma y número de teléfono:<br>
+                @Model.NombreCompleto<br>
+                @Model.Correo<br>
+                @Model.Telefono
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+

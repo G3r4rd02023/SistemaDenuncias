@@ -18,6 +18,7 @@ namespace UMA_SYSTEM.Backend.Data
         public DbSet<Permiso> Permisos { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Solicitud> Solicitudes { get; set; }
+        public DbSet<SolicitudICF> SolicitudesICF { get; set; }
         public DbSet<TipoDenuncia> TiposDenuncia { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
     }

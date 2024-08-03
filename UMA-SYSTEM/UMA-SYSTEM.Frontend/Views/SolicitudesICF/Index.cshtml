@@ -1,4 +1,4 @@
-﻿@model IEnumerable<UMA_SYSTEM.Frontend.Models.Solicitud>
+﻿@model IEnumerable<UMA_SYSTEM.Frontend.Models.SolicitudICF>
 
 @{
     ViewData["Title"] = "Index";
@@ -62,13 +62,13 @@
 
 
 <p>
-    <a onclick="showInPopup('@Url.Action("Create", "Solicitudes", new { id = 0 }, Context.Request.Scheme)' , '')"
+    <a onclick="showInPopup('@Url.Action("Create", "SolicitudesICF", new { id = 0 }, Context.Request.Scheme)' , '')"
        class="btn btn-sm btn-primary text-white mt-3"><i class=" oi oi-plus"></i>  Crear solicitud</a>
 </p>
 
 <div class=" card">
     <div class=" card-header text-center bg-info text-white">
-        <h5>Listado de Solicitudes (UMA) </h5>       
+        <h5>Listado de Solicitudes (ICF) </h5>
     </div>
     <div class="card-body">
         <table id="solicitud" class="table table-hover table responsive table stripped">
@@ -84,12 +84,12 @@
                         @Html.DisplayNameFor(model => model.NombreCompleto)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FechaSolicitud)
+                        @Html.DisplayNameFor(model => model.Fecha)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Aldea)
-                    </th>                    
-                                    
+                        @Html.DisplayNameFor(model => model.Estado!.Descripcion)
+                    </th>
+
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -106,13 +106,13 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.NombreCompleto)
                         </td>
-                        
-                        <td>@item.FechaSolicitud.ToString("yyyy-MM-dd")</td>                        
+
+                        <td>@item.Fecha.ToString("yyyy-MM-dd")</td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Aldea)
-                        </td>                                              
+                            @Html.DisplayFor(modelItem => item.Estado!.Descripcion)
+                        </td>
                         <td>
-                            <a onclick="showInPopup('@Url.Action("Details", "Solicitudes", new { id = item.Id }, Context.Request.Scheme)' ,
+                            <a onclick="showInPopup('@Url.Action("Details", "SolicitudesICF", new { id = item.Id }, Context.Request.Scheme)' ,
                     '')" class="btn btn-outline-info btn-sm"><i class="oi oi-list"></i> </a>
                         </td>
                     </tr>
@@ -120,7 +120,7 @@
             </tbody>
         </table>
     </div>
-    
+
 </div>
 
 <partial name="_MostrarModal" />

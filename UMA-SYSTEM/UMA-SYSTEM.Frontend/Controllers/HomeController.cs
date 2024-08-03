@@ -136,6 +136,50 @@ namespace UMA_SYSTEM.Frontend.Controllers
             return View(solicitud);
         }
 
+        public IActionResult VerRequisitos()
+        {
+            return View();
+        }
+        public IActionResult CrearSolicitudICF()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CrearSolicitudICF(SolicitudICF solicitud)
+        {
+            if (ModelState.IsValid)
+            {
+                solicitud.IdEstado = 3;
+                solicitud.Fecha = DateTime.Now;
+                
+                var json = JsonConvert.SerializeObject(solicitud);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("/api/SolicitudesICF/", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["AlertMessage"] = "Solicitud creada exitosamente!!!";
+                    return RedirectToAction("Privacy");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error al crear la soliictud.");
+                    TempData["ErrorMessage"] = "Ocurrió un error al intentar crear la soliictud!!!";
+                }
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                TempData["ModelErrors"] = string.Join("\n", errors);
+            }
+
+            return View(solicitud);
+        }
+
+
+
         public async Task<IActionResult> VerDenuncia(int id)
         {
             var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");

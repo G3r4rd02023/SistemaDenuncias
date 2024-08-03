@@ -1,0 +1,110 @@
+﻿@model UMA_SYSTEM.Frontend.Models.SolicitudICF
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <h4 class=" text-center"> Solicitud de licencia para aprovechamiento no comercial</h4>
+        <div class=" card">
+            <div class=" card-header text-center bg-info">
+                <img src="~/images/logoicf.jpeg" align="left" style="width: 150px; height: auto; border-radius: 50%; object-fit: cover;">
+                <img src="~/images/escudoicf.jpeg" align="right" style="width: 75px; height: auto; border-radius: 50%; object-fit: cover;">
+            </div>
+            <div class="card-body text-center">
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="DNI" class="form-control" placeholder="Número de Identidad" />
+                        <span asp-validation-for="DNI" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="NombreCompleto" class="form-control" placeholder="Nombre Completo" />
+                        <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Domicilio" class="form-control" placeholder="Domicilio" />
+                        <span asp-validation-for="Domicilio" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="PieTablar" class="form-control" placeholder="Cantidad de pies tablares (pt)" />
+                        <span asp-validation-for="PieTablar" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="MetrosCubicos" class="form-control" placeholder="Metros Cubicos (m²)" />
+                        <span asp-validation-for="MetrosCubicos" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="TipoMadera" class="form-control" placeholder="Tipo de madera" />
+                        <span asp-validation-for="TipoMadera" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="SitioTenencia" class="form-control" placeholder="Sitio de tenencia" />
+                        <span asp-validation-for="SitioTenencia" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Denominacion" class="form-control" placeholder="Denominación" />
+                        <span asp-validation-for="Denominacion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="ExtensionSuperficial" class="form-control" placeholder="Extención en (V²)" />
+                        <span asp-validation-for="ExtensionSuperficial" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="LimiteNorte" class="form-control" placeholder="Limite Norte" />
+                        <span asp-validation-for="LimiteNorte" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="LimiteSur" class="form-control" placeholder="Limite Sur" />
+                        <span asp-validation-for="LimiteSur" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="LimiteEste" class="form-control" placeholder="Limite Este" />
+                        <span asp-validation-for="LimiteEste" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="LimiteOeste" class="form-control" placeholder="Limite Oeste" />
+                        <span asp-validation-for="LimiteOeste" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <textarea asp-for="Observaciones" class="form-control" placeholder="Observaciones"></textarea>
+                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Telefono" class="form-control" placeholder="Número de telefono" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Correo" class="form-control" placeholder="Correo electrónico" />
+                        <span asp-validation-for="Correo" class="text-danger"></span>
+                    </div>
+                    <div class=" card-footer bg-info mt-2">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-check"></i> Guardar</button>
+                            <button type="button" class="btn btn-sm btn-primary" asp-action="Privacy"><i class="oi oi-ban"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
