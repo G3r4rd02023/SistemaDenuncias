@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Newtonsoft.Json;
 using Rotativa.AspNetCore;
 using System.Text;
@@ -31,9 +32,24 @@ namespace UMA_SYSTEM.Frontend.Controllers
             return View(new List<Solicitud>());
         }
 
-        public IActionResult Create()
-        {            
-            return View();
+        public async Task<IActionResult> Create()
+        {
+            var email = Uri.EscapeDataString(User.Identity!.Name!);
+            var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
+            var usuarioJson = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+
+            var solicitud = new Solicitud()
+            {
+                
+                Usuario = user!,
+                IdUsuario = user!.Id,
+                IdEstado = 1,
+                FechaSolicitud = DateTime.Now,
+                FechaVencimiento = DateTime.Now.AddDays(3),
+                FechaAprobacion = DateTime.Now.AddDays(3)
+            };
+            return View(solicitud);
         }
 
         [HttpPost]
@@ -41,15 +57,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
-                var email = Uri.EscapeDataString(User.Identity!.Name!);
-                var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
-                var usuarioJson = await userResponse.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
-                solicitud.Usuario = user!;
-                solicitud.IdUsuario = user!.Id;
-                solicitud.FechaSolicitud = DateTime.Now;
-                solicitud.FechaVencimiento = DateTime.Now.AddDays(3);
-                solicitud.FechaAprobacion = DateTime.Now.AddDays(3);
+                
                 var json = JsonConvert.SerializeObject(solicitud);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 

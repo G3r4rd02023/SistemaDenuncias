@@ -15,7 +15,7 @@ namespace UMA_SYSTEM.Frontend.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string? Domicilio { get; set; } = null!;
 
-        [RegularExpression(@"[0-9]{4}[-]{1}[0-9]{4}[-]{1}[0-9]{5}", ErrorMessage = "Formato de DNI incorrecto.")]
+        [RegularExpression(@"^\d{4}-\d{4}-\d{5}$", ErrorMessage = "El formato del DNI es inválido. Ejemplo: 0801-2000-12345.")]
         [MaxLength(20, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string DNI { get; set; } = null!;

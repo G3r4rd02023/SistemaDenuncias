@@ -99,7 +99,16 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public IActionResult CrearSolicitud()
         {
-            return View();
+            
+            var solicitud = new Solicitud()
+            {                
+                IdUsuario = 1,
+                IdEstado = 1,
+                FechaSolicitud = DateTime.Now,
+                FechaVencimiento = DateTime.Now.AddDays(3),
+                FechaAprobacion = DateTime.Now.AddDays(3)
+            };
+            return View(solicitud);
         }
 
         [HttpPost]

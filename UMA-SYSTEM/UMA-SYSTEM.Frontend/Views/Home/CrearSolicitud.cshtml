@@ -17,10 +17,30 @@
             <div class="card-body text-center">
                 <form asp-action="CrearSolicitud" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="IdEstado" />
+                    <input type="hidden" asp-for="IdUsuario" />
+                    <input type="hidden" asp-for="FechaAprobacion" />
+                    <input type="hidden" asp-for="FechaVencimiento" />
+                    <input type="hidden" asp-for="FechaSolicitud" />
                     <div class="form-group">
                         <label></label>
                         <input asp-for="DNI" class="form-control" placeholder="Número de Identidad" />
                         <span asp-validation-for="DNI" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Correo" class="form-control" placeholder="Correo electronico" />
+                        <span asp-validation-for="Correo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Telefono" class="form-control" placeholder="Telefono" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label></label>
+                        <input asp-for="Domicilio" class="form-control" placeholder="Domicilio" />
+                        <span asp-validation-for="Domicilio" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label></label>
