@@ -1,7 +1,7 @@
 ﻿@model UMA_SYSTEM.Frontend.Models.SolicitudICF
 @{
     ViewData["Title"] = "Create";
-    Layout = null;
+    Layout = "~/Views/Shared/ModalLayout.cshtml";
 }
 
 <hr />
@@ -99,7 +99,7 @@
                     <div class=" card-footer bg-info mt-2">
                         <div class="form-group">
                             <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-check"></i> Guardar</button>
-                            <button type="button" class="btn btn-sm btn-primary" asp-action="Privacy"><i class="oi oi-ban"></i> Cancelar</button>
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
                         </div>
                     </div>
                 </form>
@@ -108,3 +108,6 @@
     </div>
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

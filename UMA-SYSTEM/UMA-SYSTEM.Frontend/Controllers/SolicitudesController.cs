@@ -77,7 +77,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 TempData["ModelErrors"] = string.Join("\n", errors);
-                ViewData["UseLayout"] = true;
+                
             }
 
             return View(solicitud);

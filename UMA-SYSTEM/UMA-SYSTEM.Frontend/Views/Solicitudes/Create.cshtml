@@ -2,18 +2,8 @@
 
 @{
     ViewData["Title"] = "Create";   
-    if (ViewData["UseLayout"] != null && (bool)ViewData["UseLayout"]!)
-    {
-        Layout = "_Layout"; 
-    }
-    else
-    {
-        Layout = null;
-    }
+    Layout = "~/Views/Shared/ModalLayout.cshtml";
 }
-
-
-
 
 
 @if (TempData["ModelErrors"] != null)
@@ -39,7 +29,7 @@
                 <img src="~/images/Alcaldia Valle.png" align="left" style="width: 50px; height: auto; border-radius: 50%; object-fit: cover;">
                 <img src="~/images/Escudo Honduras.png" align="right" style="width: 50px; height: auto; border-radius: 50%; object-fit: cover;">
             </div>
-            <div class="card-body text-center">
+            <div class="card-body ">
                 <form asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>   
                     <input type="hidden" asp-for="IdEstado"/>
@@ -74,7 +64,7 @@
                         <span asp-validation-for="Domicilio" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label></label>
+                        <label>Cantidad de arboles</label>
                         <input asp-for="CantidadArboles" class="form-control" placeholder="Cantidad de arboles"/>
                         <span asp-validation-for="CantidadArboles" class="text-danger"></span>
                     </div>
@@ -120,4 +110,6 @@
     </div>
 </div>
 
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
