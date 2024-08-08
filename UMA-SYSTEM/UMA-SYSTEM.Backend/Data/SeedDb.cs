@@ -17,6 +17,9 @@ namespace UMA_SYSTEM.Backend.Data
             await _context.Database.EnsureCreatedAsync();
             await ValidarRolesAsync("Administrador");
             await ValidarRolesAsync("Usuario");
+            await ValidarTiposDenunciaAsync("Contaminación");
+            await ValidarTiposDenunciaAsync("Tala de árboles");
+            await ValidarTiposDenunciaAsync("Quema de bosque");
             await ValidarObjetosAsync("Login", "Pantalla de Login", "Formulario");
             await ValidarObjetosAsync("Registro", "Pantalla de registro", "Formulario");
             await ValidarObjetosAsync("Home", "Pantalla de inicio", "Pantalla");
@@ -28,6 +31,24 @@ namespace UMA_SYSTEM.Backend.Data
             await ValidarEstadosAsync("En Proceso");
             var rol = _context.Roles.FirstOrDefault();
             await ValidarUsuariosAsync("0801-1997-12345","SUPER","ADMIN", "superadmin@gmail.com","123456", "Activo", rol!);
+        }
+
+        private async Task<TipoDenuncia> ValidarTiposDenunciaAsync(string tipo)
+        {
+            var tipoExistente = await _context.TiposDenuncia.FirstOrDefaultAsync(e => e.Descripcion == tipo);
+            if (tipoExistente != null)
+            {
+                return tipoExistente;
+            }
+
+            TipoDenuncia tipoDenuncia = new()
+            {
+                Descripcion = tipo
+            };
+
+            _context.TiposDenuncia.Add(tipoDenuncia);
+            await _context.SaveChangesAsync();
+            return tipoDenuncia;
         }
 
         private async Task<Estado> ValidarEstadosAsync(string descripcion)
