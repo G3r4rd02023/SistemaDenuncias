@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
 <html>
 <head>
     <style>
@@ -53,12 +53,14 @@
                                     </div>
                                 </div>
                             }
-                            ¿No tienes una cuenta? <a href="@Url.Action("Registro","Login")" class="text-info"> Registraste!</a>
+                            
 
                         </form>
 
                     </div>
-
+                    <div class="container text-white bg-primary">
+                        <a asp-area="" asp-controller="Home" asp-action="Privacy" class="btn btn-primary"><i class="oi oi-arrow-thick-left"></i></a> &copy; 2024 - UMA_SYSTEM-
+                    </div>
                 </div>
 
             </div>
@@ -66,6 +68,7 @@
 
     </div>
 
+   
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
