@@ -15,14 +15,16 @@ namespace UMA_SYSTEM.Frontend.Controllers
         private readonly IServicioLista _lista;
         private readonly HttpClient _httpClient;
         private readonly Cloudinary _cloudinary;
+        private readonly IMailService _mail;
 
-        public HomeController(ILogger<HomeController> logger, IServicioLista lista, IHttpClientFactory httpClientFactory, Cloudinary cloudinary)
+        public HomeController(ILogger<HomeController> logger, IServicioLista lista, IHttpClientFactory httpClientFactory, Cloudinary cloudinary, IMailService mail)
         {
             _logger = logger;
             _lista = lista;
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _cloudinary = cloudinary;
+            _mail = mail;
         }
 
         public IActionResult Index()
@@ -65,7 +67,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
                 var urlImagen = uploadResult.SecureUrl.ToString();
 
-               
+
                 denuncia.Fecha = DateTime.Now;
                 denuncia.IdEstado = 3;
                 denuncia.Municipio = "Valle de Angeles";
@@ -79,6 +81,13 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Denuncia creada exitosamente!!!";
+                    Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
+                       "glanza007@gmail.com",
+                       $"UMA-Notificacion de Denuncia",
+                        $"Se ha recibido una nueva denuncia, para mayor información, ingresa a UMA-SYSTEM" +
+                              $"<p><a href =>Mas Detalles</a></p>" +
+                              $"https://umasystem.gmail.com"
+                       );
                     return RedirectToAction("Privacy");
                 }
                 else
@@ -99,9 +108,9 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public IActionResult CrearSolicitud()
         {
-            
+
             var solicitud = new Solicitud()
-            {                
+            {
                 IdUsuario = 1,
                 IdEstado = 1,
                 FechaSolicitud = DateTime.Now,
@@ -161,7 +170,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 solicitud.IdEstado = 3;
                 solicitud.Fecha = DateTime.Now;
-                
+
                 var json = JsonConvert.SerializeObject(solicitud);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 

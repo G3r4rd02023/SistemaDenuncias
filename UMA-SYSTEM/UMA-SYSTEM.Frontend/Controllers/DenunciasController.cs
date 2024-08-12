@@ -15,13 +15,15 @@ namespace UMA_SYSTEM.Frontend.Controllers
         private readonly HttpClient _httpClient;
         private readonly IServicioLista _lista;
         private readonly Cloudinary _cloudinary;
+        private readonly IMailService _mail;
 
-        public DenunciasController(IHttpClientFactory httpClientFactory, IServicioLista lista, Cloudinary cloudinary)
+        public DenunciasController(IHttpClientFactory httpClientFactory, IServicioLista lista, Cloudinary cloudinary, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _lista = lista;
             _cloudinary = cloudinary;
+            _mail = mail;
         }
 
         public async Task<IActionResult> Index()
@@ -74,6 +76,13 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Denuncia creada exitosamente!!!";
+                    Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
+                        "glanza007@gmail.com",
+                        $"<h1>UMA-Notificacion de Denuncia</h1>",
+                         $"Se ha recibido una nueva denuncia, para mayor información, ingresa a UMA-SYSTEM" +
+                               $"<p><a href =>Mas Detalles</a></p>" +
+                               $"https://umasystem.gmail.com"
+                        );
                     return RedirectToAction("Index");
                 }
                 else

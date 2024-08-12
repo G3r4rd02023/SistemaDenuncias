@@ -16,6 +16,7 @@ namespace UMA_SYSTEM.Frontend
             builder.Services.AddScoped<IBitacoraService, BitacoraService>();
             builder.Services.AddScoped<IParametroService, ParametroService>();
             builder.Services.AddScoped<IServicioLista, ServicioLista>();
+            builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(20); 

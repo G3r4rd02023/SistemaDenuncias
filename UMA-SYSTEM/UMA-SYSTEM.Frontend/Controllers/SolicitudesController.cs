@@ -1,21 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Rotativa.AspNetCore;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
+using UMA_SYSTEM.Frontend.Services;
+
 
 namespace UMA_SYSTEM.Frontend.Controllers
 {
     public class SolicitudesController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly IMailService _mail;
 
-
-        public SolicitudesController(IHttpClientFactory httpClientFactory)
+        public SolicitudesController(IHttpClientFactory httpClientFactory, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _mail = mail;
         }
 
         public async Task<IActionResult> Index()
@@ -41,7 +44,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
             var solicitud = new Solicitud()
             {
-                
+
                 Usuario = user!,
                 IdUsuario = user!.Id,
                 IdEstado = 1,
@@ -57,7 +60,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
-                
+
                 var json = JsonConvert.SerializeObject(solicitud);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -66,10 +69,24 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Solicitud creada exitosamente!!!";
+                    Response solicitante = _mail.SendMail("Unidad Municipal Ambiental",
+                      solicitud.Correo!,
+                      $"UMA-Notificacion de Solicitud",
+                       $"Hemos recibido su solicitud, nuestro equipo se estará comunicando con usted a la brevedad, para mayor información, ingresa a UMA-SYSTEM" +
+                             $"<p><a href =>Mas Detalles</a></p>" +
+                             $"https://umasystem.gmail.com"
+                      );
+                    Response admin_uma = _mail.SendMail("Unidad Municipal Ambiental",
+                      "glanza007@gmail.com",
+                      $"UMA-Notificacion de Solicitud",
+                       $"Se ha recibido una solicitud de " + solicitud.NombreCompleto + " , su correo elecctronico es :"+ solicitud.Correo + " , para mayor información, ingresa a UMA-SYSTEM" +
+                             $"<p><a href =>Mas Detalles</a></p>" +
+                             $"https://umasystem.gmail.com"
+                      );
                     return RedirectToAction("Index");
                 }
                 else
-                {                   
+                {
                     TempData["ErrorMessage"] = "Ocurrió un error al intentar crear la soliictud!!!";
                 }
             }
@@ -77,11 +94,12 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 TempData["ModelErrors"] = string.Join("\n", errors);
-                
+
             }
 
             return View(solicitud);
         }
+
 
         public async Task<IActionResult> Details(int id)
         {
