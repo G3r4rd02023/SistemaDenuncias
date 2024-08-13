@@ -77,9 +77,9 @@ namespace UMA_SYSTEM.Frontend.Controllers
                              $"https://umasystem.gmail.com"
                       );
                     Response admin_uma = _mail.SendMail("Unidad Municipal Ambiental",
-                      "glanza007@gmail.com",
+                      "departamentouma14@gmail.com",
                       $"UMA-Notificacion de Solicitud",
-                       $"Se ha recibido una solicitud de " + solicitud.NombreCompleto + " , su correo elecctronico es :"+ solicitud.Correo + " , para mayor información, ingresa a UMA-SYSTEM" +
+                       $"Se ha recibido una solicitud de " + solicitud.NombreCompleto + " , su correo elecctronico es: " + solicitud.Correo + " " + solicitud.Telefono + ", para mayor información, ingresa a UMA-SYSTEM" +
                              $"<p><a href =>Mas Detalles</a></p>" +
                              $"https://umasystem.gmail.com"
                       );

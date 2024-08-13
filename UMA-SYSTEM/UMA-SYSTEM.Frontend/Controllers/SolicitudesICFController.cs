@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using UMA_SYSTEM.Frontend.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Newtonsoft.Json;
 using Rotativa.AspNetCore;
 using System.Text;
@@ -10,11 +12,13 @@ namespace UMA_SYSTEM.Frontend.Controllers
     {
 
         private readonly HttpClient _httpClient;
+        private readonly IMailService _mail;
 
-        public SolicitudesICFController(IHttpClientFactory httpClientFactory)
+        public SolicitudesICFController(IHttpClientFactory httpClientFactory, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _mail = mail;
         }
 
         public async Task<IActionResult> Index()
@@ -50,6 +54,20 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Solicitud creada exitosamente!!!";
+                    Response solicitante = _mail.SendMail("Unidad Municipal Ambiental",
+                     solicitud.Correo!,
+                     $"UMA-Notificacion de Solicitud",
+                      $"Hemos recibido su solicitud, nuestro equipo se estará comunicando con usted a la brevedad, para mayor información, ingresa a UMA-SYSTEM" +
+                            $"<p><a href =>Mas Detalles</a></p>" +
+                    $"https://umasystem.gmail.com"
+                     );
+                    Response admin_uma = _mail.SendMail("Unidad Municipal Ambiental",
+                      "departamentouma14@gmail.com",
+                      $"UMA-Notificacion de Solicitud",
+                       $"Se ha recibido una solicitud de " + solicitud.NombreCompleto + " , su correo elecctronico es: " + solicitud.Correo + " " + solicitud.Telefono + ", para mayor información, ingresa a UMA-SYSTEM" +
+                             $"<p><a href =>Mas Detalles</a></p>" +
+                             $"https://umasystem.gmail.com"
+                      );
                     return RedirectToAction("Index");
                 }
                 else

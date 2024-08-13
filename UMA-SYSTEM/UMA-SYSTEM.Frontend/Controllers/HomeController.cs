@@ -82,7 +82,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 {
                     TempData["AlertMessage"] = "Denuncia creada exitosamente!!!";
                     Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
-                       "glanza007@gmail.com",
+                       "departamentouma14@gmail.com",
                        $"UMA-Notificacion de Denuncia",
                         $"Se ha recibido una nueva denuncia, para mayor información, ingresa a UMA-SYSTEM" +
                               $"<p><a href =>Mas Detalles</a></p>" +
@@ -137,6 +137,20 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Solicitud creada exitosamente!!!";
+                    Response solicitante = _mail.SendMail("Unidad Municipal Ambiental",
+                     solicitud.Correo!,
+                     $"UMA-Notificacion de Solicitud",
+                      $"Hemos recibido su solicitud, nuestro equipo se estará comunicando con usted a la brevedad, para mayor información, ingresa a UMA-SYSTEM" +
+                            $"<p><a href =>Mas Detalles</a></p>" +
+                            $"https://umasystem.gmail.com"
+                     );
+                    Response admin_uma = _mail.SendMail("Unidad Municipal Ambiental",
+                      "departamentouma14@gmail.com",
+                      $"UMA-Notificacion de Solicitud",
+                       $"Se ha recibido una solicitud de " + solicitud.NombreCompleto + " , su correo elecctronico es: " + solicitud.Correo + " " + solicitud.Telefono + ", para mayor información, ingresa a UMA-SYSTEM" +
+                             $"<p><a href =>Mas Detalles</a></p>" +
+                             $"https://umasystem.gmail.com"
+                      );
                     return RedirectToAction("Privacy");
                 }
                 else
@@ -179,6 +193,20 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     TempData["AlertMessage"] = "Solicitud creada exitosamente!!!";
+                    Response solicitante = _mail.SendMail("Unidad Municipal Ambiental",
+                     solicitud.Correo!,
+                     $"UMA-Notificacion de Solicitud",
+                      $"Hemos recibido su solicitud, nuestro equipo se estará comunicando con usted a la brevedad, para mayor información, ingresa a UMA-SYSTEM" +
+                            $"<p><a href =>Mas Detalles</a></p>" +
+                            $"https://umasystem.gmail.com"
+                     );
+                    Response admin_uma = _mail.SendMail("Unidad Municipal Ambiental",
+                      "glanza007@gmail.com",
+                      $"UMA-Notificacion de Solicitud ICF",
+                       $"Se ha recibido una solicitud de " + solicitud.NombreCompleto + " , su correo elecctronico es :" + solicitud.Correo + " , para mayor información, ingresa a UMA-SYSTEM" +
+                             $"<p><a href =>Mas Detalles</a></p>" +
+                             $"https://umasystem.gmail.com"
+                      );
                     return RedirectToAction("Privacy");
                 }
                 else
