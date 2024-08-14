@@ -50,7 +50,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 usuario.FechaCreacion = DateTime.Now;
                 usuario.FechaVencimiento = DateTime.Now.AddYears(2);
                 usuario.EstadoUsuario = "Activo";
-                usuario.RolId = 1;
+                usuario.RolId = 2;
                 var json = JsonConvert.SerializeObject(usuario);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
