@@ -11,7 +11,7 @@ namespace UMA_SYSTEM.Frontend.Services
         public ServicioLista(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
         }
 
         public async Task<IEnumerable<SelectListItem>> GetListaEstados()

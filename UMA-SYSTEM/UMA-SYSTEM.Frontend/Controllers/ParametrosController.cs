@@ -15,7 +15,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public ParametrosController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
             _bitacora = bitacoraService;
         }
 

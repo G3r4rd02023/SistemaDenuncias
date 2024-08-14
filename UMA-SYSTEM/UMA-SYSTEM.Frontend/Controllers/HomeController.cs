@@ -22,7 +22,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
             _logger = logger;
             _lista = lista;
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
             _cloudinary = cloudinary;
             _mail = mail;
         }

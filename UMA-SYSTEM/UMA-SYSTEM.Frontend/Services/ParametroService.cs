@@ -10,7 +10,7 @@ namespace UMA_SYSTEM.Frontend.Services
         public ParametroService(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
         }
 
         public async Task<string> ObtenerValor(string nombre)

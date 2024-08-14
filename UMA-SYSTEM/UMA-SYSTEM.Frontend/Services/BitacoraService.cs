@@ -13,7 +13,7 @@ namespace UMA_SYSTEM.Frontend.Services
         public BitacoraService(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
         }
 
         public async Task<Bitacora> AgregarRegistro(int usuarioId, int objetoId,string accion, string descripcion)

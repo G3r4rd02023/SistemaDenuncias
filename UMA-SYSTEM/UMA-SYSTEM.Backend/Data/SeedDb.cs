@@ -17,6 +17,8 @@ namespace UMA_SYSTEM.Backend.Data
             await _context.Database.EnsureCreatedAsync();
             await ValidarRolesAsync("Administrador");
             await ValidarRolesAsync("Usuario");
+            var rol = _context.Roles.FirstOrDefault();
+            await ValidarUsuariosAsync("0801-1997-12345", "SUPER", "ADMIN", "superadmin@gmail.com", "123456", "Activo", rol!);
             await ValidarTiposDenunciaAsync("Contaminación");
             await ValidarTiposDenunciaAsync("Tala de árboles");
             await ValidarTiposDenunciaAsync("Quema de bosque");
@@ -28,9 +30,7 @@ namespace UMA_SYSTEM.Backend.Data
             await ValidarParametrosAsync("Fecha de vencimiento de usuarios", "2", 1);
             await ValidarEstadosAsync("Aceptado");
             await ValidarEstadosAsync("Rechazado");
-            await ValidarEstadosAsync("En Proceso");
-            var rol = _context.Roles.FirstOrDefault();
-            await ValidarUsuariosAsync("0801-1997-12345","SUPER","ADMIN", "superadmin@gmail.com","123456", "Activo", rol!);
+            await ValidarEstadosAsync("En Proceso");                       
         }
 
         private async Task<TipoDenuncia> ValidarTiposDenunciaAsync(string tipo)

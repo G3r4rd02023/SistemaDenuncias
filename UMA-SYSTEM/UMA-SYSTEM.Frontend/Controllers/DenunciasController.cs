@@ -20,7 +20,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public DenunciasController(IHttpClientFactory httpClientFactory, IServicioLista lista, Cloudinary cloudinary, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
             _lista = lista;
             _cloudinary = cloudinary;
             _mail = mail;
