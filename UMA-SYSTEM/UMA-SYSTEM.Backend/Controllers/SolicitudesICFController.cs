@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UMA_SYSTEM.Backend.Data;
 using UMA_SYSTEM.Backend.Models;
@@ -6,6 +7,7 @@ using UMA_SYSTEM.Backend.Models;
 namespace UMA_SYSTEM.Backend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class SolicitudesICFController : ControllerBase
     {

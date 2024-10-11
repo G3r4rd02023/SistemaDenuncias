@@ -11,7 +11,8 @@ namespace UMA_SYSTEM.Frontend.Services
         public ServicioLista(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            // _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
         }
 
         public async Task<IEnumerable<SelectListItem>> GetListaEstados()
@@ -99,6 +100,14 @@ namespace UMA_SYSTEM.Frontend.Services
             }
             var codigo = $"E-{(lastNumber + 1).ToString("D5")}";
             return codigo;
+        }
+
+        public async Task<Usuario> GetUsuarioByEmail(string email)
+        {
+            var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
+            var usuarioJson = await userResponse.Content.ReadAsStringAsync();
+            var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+            return usuario!;
         }
     }
 }

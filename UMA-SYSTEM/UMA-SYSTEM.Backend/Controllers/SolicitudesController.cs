@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UMA_SYSTEM.Backend.Data;
@@ -7,6 +8,7 @@ using UMA_SYSTEM.Backend.Models;
 namespace UMA_SYSTEM.Backend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class SolicitudesController : ControllerBase
     {
@@ -28,11 +30,11 @@ namespace UMA_SYSTEM.Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(Solicitud solicitud)
         {
-            var usuario = _context.Usuarios.FirstOrDefault(e => e.Id == solicitud.IdUsuario);           
+            var usuario = _context.Usuarios.FirstOrDefault(e => e.Id == solicitud.IdUsuario);
 
             if (usuario != null)
             {
-                solicitud.Usuario = usuario;               
+                solicitud.Usuario = usuario;
                 _context.Add(solicitud);
                 await _context.SaveChangesAsync();
                 return Ok();
@@ -47,7 +49,7 @@ namespace UMA_SYSTEM.Backend.Controllers
         public async Task<IActionResult> GetAsync(int id)
         {
             var solicitud = await _context.Solicitudes
-                .Include(x => x.Usuario)                
+                .Include(x => x.Usuario)
                 .SingleOrDefaultAsync(c => c.Id == id);
             if (solicitud == null)
             {
@@ -55,6 +57,5 @@ namespace UMA_SYSTEM.Backend.Controllers
             }
             return Ok(solicitud);
         }
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using UMA_SYSTEM.Frontend.Models;
 
 namespace UMA_SYSTEM.Frontend.Services
 {
@@ -12,5 +13,6 @@ namespace UMA_SYSTEM.Frontend.Services
 
         Task<string> ObtenerCodigo();
 
+        Task<Usuario> GetUsuarioByEmail(string email);
     }
 }

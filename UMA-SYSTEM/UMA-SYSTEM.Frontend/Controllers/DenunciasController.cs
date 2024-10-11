@@ -6,12 +6,14 @@ using UMA_SYSTEM.Frontend.Models;
 using UMA_SYSTEM.Frontend.Services;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UMA_SYSTEM.Frontend.Controllers
 {
+    [Authorize]
     public class DenunciasController : Controller
     {
-
         private readonly HttpClient _httpClient;
         private readonly IServicioLista _lista;
         private readonly Cloudinary _cloudinary;
@@ -20,7 +22,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public DenunciasController(IHttpClientFactory httpClientFactory, IServicioLista lista, Cloudinary cloudinary, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _lista = lista;
             _cloudinary = cloudinary;
             _mail = mail;
@@ -28,6 +31,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync("/api/Denuncias");
 
             if (response.IsSuccessStatusCode)
@@ -46,8 +54,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 Estados = await _lista.GetListaEstados(),
                 Tipos = await _lista.GetListaTipos(),
-                NumExpediente = await _lista.ObtenerCodigo(),                
-            }; 
+                NumExpediente = await _lista.ObtenerCodigo(),
+            };
             return View(denuncia);
         }
 
@@ -137,7 +145,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 PageSize = Rotativa.AspNetCore.Options.Size.A4
             };
         }
-       
+
         public async Task<IActionResult> SubirImagen(int id)
         {
             var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");
@@ -163,7 +171,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
         [HttpPost]
         public async Task<IActionResult> SubirImagen(Anexo anexo, IFormFile file)
         {
-            
             if (file == null || file.Length == 0)
             {
                 return BadRequest("Ningun archivo seleccionado");
@@ -179,20 +186,19 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
             var urlImagen = uploadResult.SecureUrl.ToString();
 
-           
             anexo.NombreArchivo = file.FileName;
             anexo.Fecha = DateTime.Now;
             anexo.URL = urlImagen;
-            
+
             var json = JsonConvert.SerializeObject(anexo);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var responseImg = await _httpClient.PostAsync("/api/Anexos/", content);
 
             if (responseImg.IsSuccessStatusCode)
-            {               
+            {
                 TempData["AlertMessage"] = "Imagen agregada exitosamente!!!";
-                return RedirectToAction("VerImagenes","Imagenes");
+                return RedirectToAction("VerImagenes", "Imagenes");
             }
             else
             {
@@ -213,9 +219,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 var anexos = JsonConvert.DeserializeObject<IEnumerable<Anexo>>(content);
                 return View("Index", anexos);
             }
-          
+
             return View(new List<Anexo>());
         }
-
     }
 }

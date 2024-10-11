@@ -11,7 +11,7 @@ namespace UMA_SYSTEM.Frontend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews(); 
+            builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IBitacoraService, BitacoraService>();
             builder.Services.AddScoped<IParametroService, ParametroService>();
@@ -19,15 +19,15 @@ namespace UMA_SYSTEM.Frontend
             builder.Services.AddScoped<IMailService, MailService>();
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(20); 
-                options.Cookie.HttpOnly = true; 
-                options.Cookie.IsEssential = true; 
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddCookie(options =>
            {
-              options.LoginPath = "/Login/IniciarSesion";
-              options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+               options.LoginPath = "/Login/IniciarSesion";
+               options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
            });
 
             var cloudinaryConfig = builder.Configuration.GetSection("Cloudinary");
@@ -55,8 +55,9 @@ namespace UMA_SYSTEM.Frontend
 
             app.UseRouting();
             app.UseSession();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Privacy}/{id?}");

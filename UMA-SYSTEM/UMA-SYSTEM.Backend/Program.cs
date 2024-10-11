@@ -1,5 +1,7 @@
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using UMA_SYSTEM.Backend.Data;
 
 namespace UMA_SYSTEM.Backend
@@ -18,6 +20,28 @@ namespace UMA_SYSTEM.Backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            var key = builder.Configuration["Jwt:key"];
+
+            builder.Services.AddAuthentication(config =>
+            {
+                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(config =>
+            {
+                config.RequireHttpsMetadata = false;
+                config.SaveToken = true;
+                config.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(key!))
+                };
+            });
 
             var app = builder.Build();
 
@@ -40,9 +64,8 @@ namespace UMA_SYSTEM.Backend
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

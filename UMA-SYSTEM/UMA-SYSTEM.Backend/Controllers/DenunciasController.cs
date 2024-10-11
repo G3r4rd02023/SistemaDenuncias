@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UMA_SYSTEM.Backend.Data;
 using UMA_SYSTEM.Backend.Models;
@@ -6,6 +7,7 @@ using UMA_SYSTEM.Backend.Models;
 namespace UMA_SYSTEM.Backend.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class DenunciasController : ControllerBase
     {
@@ -21,7 +23,7 @@ namespace UMA_SYSTEM.Backend.Controllers
         {
             return Ok(await _context.Denuncias
                 .Include(d => d.TipoDenuncia)
-                .Include(d => d.Estado)                
+                .Include(d => d.Estado)
                 .ToListAsync());
         }
 
@@ -30,10 +32,9 @@ namespace UMA_SYSTEM.Backend.Controllers
         {
             var estado = _context.Estados.FirstOrDefault(e => e.Id == denuncia.IdEstado);
             var tipo = _context.TiposDenuncia.FirstOrDefault(e => e.Id == denuncia.IdTipoDenuncia);
-            
+
             if (estado != null && tipo != null)
             {
-                
                 denuncia.TipoDenuncia = tipo;
                 denuncia.Estado = estado;
                 _context.Add(denuncia);
@@ -54,7 +55,7 @@ namespace UMA_SYSTEM.Backend.Controllers
             else
             {
                 return BadRequest("Estado o tipo no pueden ser nulos");
-            }            
+            }
         }
 
         [HttpGet("{id}")]
@@ -62,13 +63,13 @@ namespace UMA_SYSTEM.Backend.Controllers
         {
             var denuncia = await _context.Denuncias
                 .Include(x => x.TipoDenuncia)
-                .Include(x => x.Estado)                
+                .Include(x => x.Estado)
                 .SingleOrDefaultAsync(c => c.Id == id);
             if (denuncia == null)
             {
                 return NotFound();
             }
             return Ok(denuncia);
-        }       
+        }
     }
 }
