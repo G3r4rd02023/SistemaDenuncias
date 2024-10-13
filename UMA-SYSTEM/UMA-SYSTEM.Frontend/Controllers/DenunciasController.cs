@@ -85,7 +85,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 {
                     TempData["AlertMessage"] = "Denuncia creada exitosamente!!!";
                     Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
-                        "departamentouma14@gmail.com",
+                        "glanza007@gmail.com",
                         $"<h1>UMA-Notificacion de Denuncia</h1>",
                          $"Se ha recibido una nueva denuncia, para mayor información, ingresa a UMA-SYSTEM" +
                                $"<p><a href =>Mas Detalles</a></p>" +

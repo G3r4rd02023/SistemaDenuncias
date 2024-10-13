@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UMA_SYSTEM.Backend.Data;
 using UMA_SYSTEM.Backend.Models;
@@ -16,6 +17,7 @@ namespace UMA_SYSTEM.Backend.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpPost("Registro")]
         public async Task<IActionResult> Registro([FromBody] Usuario model)
         {
@@ -43,7 +45,7 @@ namespace UMA_SYSTEM.Backend.Controllers
             var usuario = await _context.Usuarios
                 .SingleOrDefaultAsync(u => u.Email == login.Email);
 
-            if (usuario != null)
+            if (usuario != null && usuario.EstadoUsuario == "Activo")
             {
                 if (BCrypt.Net.BCrypt.Verify(login.Contraseña, usuario.Contraseña))
                 {
@@ -54,7 +56,5 @@ namespace UMA_SYSTEM.Backend.Controllers
 
             return Unauthorized(new { Message = "Inicio de sesión fallido. Usuario o contraseña incorrectos." });
         }
-
-       
     }
 }

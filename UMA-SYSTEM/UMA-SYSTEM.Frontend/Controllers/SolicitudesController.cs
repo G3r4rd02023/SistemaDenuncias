@@ -1,11 +1,9 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Rotativa.AspNetCore;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
 using UMA_SYSTEM.Frontend.Services;
-
 
 namespace UMA_SYSTEM.Frontend.Controllers
 {
@@ -17,7 +15,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public SolicitudesController(IHttpClientFactory httpClientFactory, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _mail = mail;
         }
 
@@ -44,7 +43,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
             var solicitud = new Solicitud()
             {
-
                 Usuario = user!,
                 IdUsuario = user!.Id,
                 IdEstado = 1,
@@ -60,7 +58,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var json = JsonConvert.SerializeObject(solicitud);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -94,12 +91,10 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 TempData["ModelErrors"] = string.Join("\n", errors);
-
             }
 
             return View(solicitud);
         }
-
 
         public async Task<IActionResult> Details(int id)
         {

@@ -13,8 +13,7 @@
         <div class="card-body text-success">          
             <form asp-action="Details" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id"/>
-                <input type="hidden" asp-for="EstadoUsuario" />
+                <input type="hidden" asp-for="Id"/>                
                 <input type="hidden" asp-for="Contraseña" />
                 <input type="hidden" asp-for="Nombre" />
                 <input type="hidden" asp-for="Apellidos"/>
@@ -43,6 +42,17 @@
                     <label>Rol</label>
                     <select asp-for="RolId" asp-items="Model.Roles" class="form-control"></select>
                     <span asp-validation-for="RolId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select asp-for="EstadoUsuario" class="form-control">
+                        <option value="Nuevo">Nuevo</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Bloqueado">Boqueado</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                    <span asp-validation-for="EstadoUsuario" class="text-danger"></span>
                 </div>
                
                 <div class="card-footer text-center">

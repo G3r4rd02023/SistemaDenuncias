@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
 using UMA_SYSTEM.Frontend.Services;
@@ -11,13 +12,17 @@ namespace UMA_SYSTEM.Frontend.Controllers
         private readonly HttpClient _httpClient;
         private readonly IBitacoraService _bitacora;
         private readonly IServicioLista _lista;
+        private readonly IMailService _mail;
 
-        public UsuariosController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService, IServicioLista lista)
+        public UsuariosController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService,
+            IServicioLista lista, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _bitacora = bitacoraService;
             _lista = lista;
+            _mail = mail;
         }
 
         public async Task<IActionResult> Index()
@@ -37,7 +42,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             var usuario = new Usuario()
             {
-                EstadoUsuario = "Activo"
+                EstadoUsuario = "Nuevo"
             };
             return View(usuario);
         }
@@ -49,8 +54,13 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 usuario.FechaCreacion = DateTime.Now;
                 usuario.FechaVencimiento = DateTime.Now.AddYears(2);
-                usuario.EstadoUsuario = "Activo";
+                usuario.EstadoUsuario = "Nuevo";
                 usuario.RolId = 2;
+
+                var servicioToken = new ServicioToken();
+                var token = await servicioToken.ConfirmarUsuario(usuario);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 var json = JsonConvert.SerializeObject(usuario);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -58,11 +68,16 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["AlertMessage"] = "Usuario creado exitosamente!!!";
-                    var email = Uri.EscapeDataString(usuario.Email);
-                    var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
-                    var usuarioJson = await userResponse.Content.ReadAsStringAsync();
-                    var user = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+                    TempData["Message"] = "Usuario registrado exitosamente, las instrucciones para su activación han sido enviadas a su correo";
+                    Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
+                      usuario.Email,
+                      $"UMA-Correo de confirmacion de Usuario",
+                       $"Tu solicitud de creacion de usuario ha sido aprobada, para acceder al sistema, ingresa a UMA-SYSTEM" +
+                             $"<p><a href =>Mas Detalles</a></p>" +
+                             $"https://localhost:7269/"
+                      );
+
+                    var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
                     await _bitacora.AgregarRegistro(user!.Id, 2, "Insertó", "Registro de un nuevo usuario administrador");
                     return RedirectToAction("Index");
                 }
@@ -114,7 +129,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 }
                 else
                 {
-
                     TempData["ErrorMessage"] = "Error al actualizar usuario!!";
                 }
             }
@@ -158,10 +172,10 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     {
                         var changePasswordModel = new
                         {
-                            UserId = model.UserId,
-                            OldPassword = model.OldPassword,
-                            NewPassword = model.NewPassword,
-                            Confirmation = model.Confirmation
+                            model.UserId,
+                            model.OldPassword,
+                            model.NewPassword,
+                            model.Confirmation
                         };
 
                         var content = new StringContent(JsonConvert.SerializeObject(changePasswordModel), Encoding.UTF8, "application/json");
@@ -217,7 +231,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
             {
                 TempData["Error"] = "Error al obtener el usuario.";
                 return RedirectToAction("Index");
-
             }
             else
             {
@@ -237,7 +250,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     DNI = user.DNI,
                     Email = user.Email,
                     EstadoUsuario = user.EstadoUsuario,
-                    Nombre  = user.Nombre,
+                    Nombre = user.Nombre,
                     NumeroIntentos = user.NumeroIntentos,
                     Rol = user.Rol,
                     RolId = user.RolId,

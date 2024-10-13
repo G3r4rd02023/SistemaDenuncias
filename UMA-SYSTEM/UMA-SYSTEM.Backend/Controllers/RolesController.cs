@@ -22,7 +22,7 @@ namespace UMA_SYSTEM.Backend.Controllers
         {
             return Ok(await _context.Roles.ToListAsync());
         }
-       
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(int id)
         {
@@ -43,15 +43,15 @@ namespace UMA_SYSTEM.Backend.Controllers
             }
 
             var usuarioExistente = await _context.Usuarios.FindAsync(id);
-            if(usuarioExistente == null)
+            if (usuarioExistente == null)
             {
                 return NotFound();
             }
-           
-            usuarioExistente.RolId = usuario.RolId;           
+
+            usuarioExistente.EstadoUsuario = usuario.EstadoUsuario;
+            usuarioExistente.RolId = usuario.RolId;
             await _context.SaveChangesAsync();
             return NoContent();
-        } 
-
+        }
     }
 }

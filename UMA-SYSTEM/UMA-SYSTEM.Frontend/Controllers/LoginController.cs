@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
@@ -11,17 +12,22 @@ namespace UMA_SYSTEM.Frontend.Controllers
 {
     public class LoginController : Controller
     {
-
         private readonly HttpClient _httpClient;
         private readonly IBitacoraService _bitacora;
         private readonly IParametroService _parametro;
+        private readonly IServicioLista _lista;
+        private readonly IMailService _mail;
 
-        public LoginController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService, IParametroService parametro)
+        public LoginController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService, IParametroService parametro,
+            IServicioLista lista, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _bitacora = bitacoraService;
             _parametro = parametro;
+            _lista = lista;
+            _mail = mail;
         }
 
         public IActionResult Registro()
@@ -39,13 +45,15 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 usuario.RolId = 2;
-                usuario.EstadoUsuario = "Activo";
+                usuario.EstadoUsuario = "Nuevo";
                 usuario.FechaCreacion = DateTime.Now;
                 usuario.FechaVencimiento = DateTime.Now.AddYears(int.Parse(await _parametro.ObtenerValor("Fecha de vencimiento de usuarios")));
 
                 //usuario.FechaVencimiento = DateTime.Now.AddYears(2);
+                var servicioToken = new ServicioToken();
+                var token = await servicioToken.ConfirmarUsuario(usuario);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var json = JsonConvert.SerializeObject(usuario);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -54,11 +62,15 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["Message"] = "Usuario registrado exitosamente!!!";
-                    var email = Uri.EscapeDataString(usuario.Email);
-                    var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
-                    var usuarioJson = await userResponse.Content.ReadAsStringAsync();
-                    var user = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+                    Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
+                       "departamentouma14@gmail.com",
+                       $"<h1>UMA-Correo de confirmacion de Usuario</h1>",
+                        $"Tu solicitud de usuario ha sido aprobada, para acceder al sistema, ingresa a UMA-SYSTEM" +
+                              $"<p><a href =>Mas Detalles</a></p>" +
+                              $"https://localhost:7125/"
+                       );
+                    TempData["Message"] = "Usuario registrado exitosamente, las instrucciones para su activación han sido enviadas a su correo";
+                    var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
                     await _bitacora.AgregarRegistro(user!.Id, 2, "Insertó", "Registro de un nuevo usuario");
                     return RedirectToAction("IniciarSesion", "Login");
                 }
@@ -70,8 +82,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
             return View(usuario);
         }
 
-
-
         public IActionResult IniciarSesion()
         {
             return View();
@@ -82,24 +92,21 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var json = JsonConvert.SerializeObject(model);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                
                 var email = Uri.EscapeDataString(model.Email);
                 var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
                 var usuarioJson = await userResponse.Content.ReadAsStringAsync();
                 var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
 
                 var intentosPermitidos = (int.Parse(await _parametro.ObtenerValor("Intentos permitidos")));
-             
+
                 if (usuario!.NumeroIntentos <= intentosPermitidos)
                 {
                     var response = await _httpClient.PostAsync("/api/Login/IniciarSesion", content);
                     if (response.IsSuccessStatusCode)
                     {
-                        
                         var result = await _httpClient.GetAsync($"/api/Roles/{usuario!.RolId}");
                         var rolJson = await result.Content.ReadAsStringAsync();
                         var rol = JsonConvert.DeserializeObject<Rol>(rolJson);
@@ -120,11 +127,10 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     }
                     else
                     {
-                        usuario.NumeroIntentos += 1;                       
+                        usuario.NumeroIntentos += 1;
                         ViewData["AlertMessage"] = "Usuario o clave incorrectos!!! numero de intentos: " + usuario.NumeroIntentos;
                     }
                 }
-               
             }
             else
             {
