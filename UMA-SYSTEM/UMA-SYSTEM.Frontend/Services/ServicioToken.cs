@@ -61,5 +61,33 @@ namespace UMA_SYSTEM.Frontend.Services
             var token = resultado!.Token;
             return token;
         }
+
+        public async Task<string> RecuperarPassword(Usuario usuario)
+        {
+            var cliente = new HttpClient();
+            cliente.BaseAddress = new Uri("https://localhost:7269/");
+
+            var credenciales = new Usuario()
+            {
+                DNI = usuario.DNI,
+                Nombre = usuario.Nombre,
+                Apellidos = usuario.Apellidos,
+                Email = usuario.Email,
+                Contraseña = usuario.Contraseña,
+                FechaCreacion = usuario.FechaCreacion,
+                FechaVencimiento = usuario.FechaVencimiento,
+                EstadoUsuario = usuario.EstadoUsuario,
+                NumeroIntentos = usuario.NumeroIntentos,
+                RolId = usuario.RolId
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(credenciales), Encoding.UTF8, "application/json");
+            var response = await cliente.PostAsync("api/Authentication/RecoverPassword", content);
+            var json = await response.Content.ReadAsStringAsync();
+
+            var resultado = JsonConvert.DeserializeObject<Credencial>(json);
+            var token = resultado!.Token;
+            return token;
+        }
     }
 }

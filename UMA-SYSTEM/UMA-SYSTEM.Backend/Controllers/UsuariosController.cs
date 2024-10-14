@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http;
 using UMA_SYSTEM.Backend.Data;
 using UMA_SYSTEM.Backend.Models;
 
@@ -108,16 +106,28 @@ namespace UMA_SYSTEM.Backend.Controllers
             return NoContent();
         }
 
-        [HttpPut("CambiarPassword/{id}")]
-        public async Task<IActionResult> CambiarPassword(int id, [FromBody] CambiarPasswordVM model)
+        [HttpPut("CambiarPassword/{email}")]
+        public async Task<IActionResult> CambiarPassword(string email, [FromBody] CambiarPasswordVM model)
         {
-            if (id != model.UserId)
+            var usuarioEncontrado = await _context.Usuarios.AsNoTracking().
+                FirstOrDefaultAsync(u => u.Email == email);
+            if (usuarioEncontrado == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
+            usuarioEncontrado.Contraseña = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+
+            _context.Update(usuarioEncontrado);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPut("ResetPassword/{email}")]
+        public async Task<IActionResult> ResetPassword(string email, [FromBody] ResetPasswordVM model)
+        {
             var usuarioEncontrado = await _context.Usuarios.AsNoTracking().
-                FirstOrDefaultAsync(u => u.Id == model.UserId);
+                FirstOrDefaultAsync(u => u.Email == email);
             if (usuarioEncontrado == null)
             {
                 return NotFound();
