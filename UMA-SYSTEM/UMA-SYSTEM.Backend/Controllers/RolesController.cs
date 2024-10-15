@@ -34,6 +34,14 @@ namespace UMA_SYSTEM.Backend.Controllers
             return Ok(role);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> PostAsync(Rol rol)
+        {
+            _context.Add(rol);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] Usuario usuario)
         {
@@ -50,6 +58,19 @@ namespace UMA_SYSTEM.Backend.Controllers
 
             usuarioExistente.EstadoUsuario = usuario.EstadoUsuario;
             usuarioExistente.RolId = usuario.RolId;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var rol = await _context.Roles.FindAsync(id);
+            if (rol == null)
+            {
+                return NotFound();
+            }
+            _context.Remove(rol);
             await _context.SaveChangesAsync();
             return NoContent();
         }
