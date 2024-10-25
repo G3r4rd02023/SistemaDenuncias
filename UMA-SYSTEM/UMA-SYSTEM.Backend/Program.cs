@@ -63,6 +63,9 @@ namespace UMA_SYSTEM.Backend
                 app.UseSwaggerUI();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

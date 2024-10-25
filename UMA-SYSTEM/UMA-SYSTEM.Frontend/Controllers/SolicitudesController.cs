@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Rotativa.AspNetCore;
+using System.Net.Http.Headers;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
 using UMA_SYSTEM.Frontend.Services;
@@ -11,17 +12,24 @@ namespace UMA_SYSTEM.Frontend.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly IMailService _mail;
+        private readonly IServicioLista _lista;
 
-        public SolicitudesController(IHttpClientFactory httpClientFactory, IMailService mail)
+        public SolicitudesController(IHttpClientFactory httpClientFactory, IMailService mail, IServicioLista lista)
         {
             _httpClient = httpClientFactory.CreateClient();
-            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _mail = mail;
+            _lista = lista;
         }
 
         public async Task<IActionResult> Index()
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync("/api/Solicitudes");
 
             if (response.IsSuccessStatusCode)
@@ -58,6 +66,12 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+                var servicioToken = new ServicioToken();
+                var token = await servicioToken.Autenticar(user);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 var json = JsonConvert.SerializeObject(solicitud);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -98,6 +112,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"/api/Solicitudes/{id}");
 
             if (!response.IsSuccessStatusCode)
@@ -114,6 +133,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> GenerarPdf(int id)
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"/api/Solicitudes/{id}");
 
             if (!response.IsSuccessStatusCode)

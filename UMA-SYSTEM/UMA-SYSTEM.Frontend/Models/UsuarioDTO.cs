@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UMA_SYSTEM.Frontend.Models
 {
-    public class Usuario
+    public class UsuarioDTO
     {
         public int Id { get; set; }
 
@@ -25,14 +25,6 @@ namespace UMA_SYSTEM.Frontend.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Email { get; set; } = null!;
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Nueva contraseña")]
-        [StringLength(64, MinimumLength = 8, ErrorMessage = "El campo {0} debe tener entre {2} y {1} carácteres.")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$",
-    ErrorMessage = "El campo {0} debe tener al menos una letra mayúscula, una minúscula, un número y un carácter especial.")]
-        public string Contraseña { get; set; } = null!;
-
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaVencimiento { get; set; }
 
@@ -41,7 +33,7 @@ namespace UMA_SYSTEM.Frontend.Models
 
         public int NumeroIntentos { get; set; }
         public int RolId { get; set; }
-        public Rol? Rol { get; set; }
+
         public string FullName => $"{Nombre} {Apellidos}";
 
         [NotMapped]

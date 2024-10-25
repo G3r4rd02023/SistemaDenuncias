@@ -19,8 +19,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
             IServicioLista lista, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _bitacora = bitacoraService;
             _lista = lista;
             _mail = mail;
@@ -58,8 +58,9 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 usuario.EstadoUsuario = "Nuevo";
                 usuario.RolId = 2;
 
+                var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
                 var servicioToken = new ServicioToken();
-                var token = await servicioToken.ConfirmarUsuario(usuario);
+                var token = await servicioToken.Autenticar(user);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var json = JsonConvert.SerializeObject(usuario);
@@ -78,9 +79,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
                              $"https://www.umasystem.somee.com/"
                       );
 
-                    var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
                     await _bitacora.AgregarRegistro(user!.Id, 2, "Insertó", "Registro de un nuevo usuario administrador");
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Usuarios");
                 }
                 else
                 {
@@ -236,16 +236,15 @@ namespace UMA_SYSTEM.Frontend.Controllers
             else
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<Usuario>(content);
+                var user = JsonConvert.DeserializeObject<UsuarioDTO>(content);
                 if (user == null)
                 {
                     return NotFound();
                 }
 
-                var usuario = new Usuario()
+                var usuario = new UsuarioDTO()
                 {
                     Apellidos = user.Apellidos,
-                    Contraseña = user.Contraseña,
                     FechaCreacion = user.FechaCreacion,
                     FechaVencimiento = user.FechaVencimiento,
                     DNI = user.DNI,
@@ -253,7 +252,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     EstadoUsuario = user.EstadoUsuario,
                     Nombre = user.Nombre,
                     NumeroIntentos = user.NumeroIntentos,
-                    Rol = user.Rol,
                     RolId = user.RolId,
                     Roles = await _lista.GetListaRoles()
                 };
@@ -263,7 +261,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Details(int id, Usuario usuario)
+        public async Task<IActionResult> Details(int id, UsuarioDTO usuario)
         {
             if (ModelState.IsValid)
             {
@@ -292,30 +290,38 @@ namespace UMA_SYSTEM.Frontend.Controllers
         [HttpPost]
         public async Task<IActionResult> RecoverPassword(RecoverPasswordVM model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await _lista.GetUsuarioByEmail(model.Email);
-                if (user == null)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, "El email no corresponde a ningún usuario registrado.");
-                    return View(model);
+                    var user = await _lista.GetUsuarioByEmail(model.Email);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "El email no corresponde a ningún usuario registrado.");
+                        return View(model);
+                    }
+
+                    var servicioToken = new ServicioToken();
+                    var token = await servicioToken.RecuperarPassword(user);
+                    var callbackUrl = Url.Action("ResetPassword", "Usuarios", new { token = token, email = model.Email }, protocol: HttpContext.Request.Scheme);
+
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                    ModelState.AddModelError(string.Empty, "Las instrucciones para recuperar su contraseña han sido enviadas a su correo electrónico.");
+                    Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
+                     model.Email,
+                     $"UMA - Correo de recuperación de contraseña",
+                     $"Tu solicitud de recuperación de contraseña ha sido aprobada, para acceder al sistema, inicia sesión en UMA-SYSTEM" +
+                     $"<p><a href='{callbackUrl}'>Cambia tu contraseña aquí</a></p>"
+                     );
                 }
-
-                var servicioToken = new ServicioToken();
-                var token = await servicioToken.RecuperarPassword(user);
-                var callbackUrl = Url.Action("ResetPassword", "Usuarios", new { token = token, email = model.Email }, protocol: HttpContext.Request.Scheme);
-
-                //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                ModelState.AddModelError(string.Empty, "Las instrucciones para recuperar su contraseña han sido enviadas a su correo electrónico.");
-                Response respuesta = _mail.SendMail("Unidad Municipal Ambiental",
-                 model.Email,
-                 $"UMA - Correo de recuperación de contraseña",
-                 $"Tu solicitud de recuperación de contraseña ha sido aprobada, para acceder al sistema, inicia sesión en UMA-SYSTEM" +
-                 $"<p><a href='{callbackUrl}'>Cambia tu contraseña aquí</a></p>"
-                 );
+                return View(model);
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Error en la recuperación de contraseña para el usuario {model.Email}: {ex.Message}");
+                throw;
+            }
         }
 
         public IActionResult ResetPassword(string token, string email)

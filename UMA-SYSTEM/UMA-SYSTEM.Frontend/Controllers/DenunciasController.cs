@@ -22,8 +22,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public DenunciasController(IHttpClientFactory httpClientFactory, IServicioLista lista, Cloudinary cloudinary, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _lista = lista;
             _cloudinary = cloudinary;
             _mail = mail;
@@ -79,6 +79,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 var json = JsonConvert.SerializeObject(denuncia);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+                var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+                var servicioToken = new ServicioToken();
+                var token = await servicioToken.Autenticar(user);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var response = await _httpClient.PostAsync("/api/Denuncias/", content);
 
                 if (response.IsSuccessStatusCode)
@@ -111,6 +116,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");
 
             if (!response.IsSuccessStatusCode)
@@ -127,6 +137,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> GenerarPdf(int id)
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");
 
             if (!response.IsSuccessStatusCode)
@@ -148,6 +163,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> SubirImagen(int id)
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");
 
             if (!response.IsSuccessStatusCode)
@@ -190,6 +210,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
             anexo.Fecha = DateTime.Now;
             anexo.URL = urlImagen;
 
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var json = JsonConvert.SerializeObject(anexo);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -211,6 +236,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public async Task<IActionResult> VerImagenes(int id)
         {
+            var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"/api/Anexos/{id}");
 
             if (response.IsSuccessStatusCode)

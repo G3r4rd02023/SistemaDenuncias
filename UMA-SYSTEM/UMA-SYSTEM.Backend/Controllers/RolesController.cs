@@ -43,7 +43,7 @@ namespace UMA_SYSTEM.Backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, [FromBody] Usuario usuario)
+        public async Task<IActionResult> PutAsync(int id, [FromBody] UsuarioDTO usuario)
         {
             if (id != usuario.Id)
             {

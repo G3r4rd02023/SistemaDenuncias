@@ -9,7 +9,7 @@ namespace UMA_SYSTEM.Frontend.Services
         public async Task<string> Autenticar(Usuario usuario)
         {
             var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri("https://localhost:7269/");
+            cliente.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
 
             var credenciales = new Usuario()
             {
@@ -37,7 +37,8 @@ namespace UMA_SYSTEM.Frontend.Services
         public async Task<string> ConfirmarUsuario(Usuario usuario)
         {
             var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri("https://localhost:7269/");
+            cliente.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //cliente.BaseAddress = new Uri("https://localhost:7269/");
 
             var credenciales = new Usuario()
             {
@@ -65,7 +66,8 @@ namespace UMA_SYSTEM.Frontend.Services
         public async Task<string> RecuperarPassword(Usuario usuario)
         {
             var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri("https://localhost:7269/");
+            cliente.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //cliente.BaseAddress = new Uri("https://localhost:7269/");
 
             var credenciales = new Usuario()
             {

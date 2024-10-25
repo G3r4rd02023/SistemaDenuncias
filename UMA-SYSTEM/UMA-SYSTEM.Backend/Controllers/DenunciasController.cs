@@ -7,7 +7,7 @@ using UMA_SYSTEM.Backend.Models;
 namespace UMA_SYSTEM.Backend.Controllers
 {
     [Route("api/[controller]")]
-
+    [Authorize]
     [ApiController]
     public class DenunciasController : ControllerBase
     {

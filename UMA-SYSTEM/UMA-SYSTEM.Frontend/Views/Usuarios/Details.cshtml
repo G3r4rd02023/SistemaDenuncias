@@ -1,4 +1,4 @@
-﻿@model UMA_SYSTEM.Frontend.Models.Usuario
+﻿@model UMA_SYSTEM.Frontend.Models.UsuarioDTO
 @{
     ViewData["Title"] = "Details";
     Layout = null;
@@ -13,8 +13,7 @@
         <div class="card-body text-success">          
             <form asp-action="Details" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id"/>                
-                <input type="hidden" asp-for="Contraseña" />
+                <input type="hidden" asp-for="Id"/>                              
                 <input type="hidden" asp-for="Nombre" />
                 <input type="hidden" asp-for="Apellidos"/>
                 <div class="form-group">

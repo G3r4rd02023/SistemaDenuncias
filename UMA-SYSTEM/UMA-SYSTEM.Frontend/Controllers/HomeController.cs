@@ -3,6 +3,7 @@ using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Text;
 using UMA_SYSTEM.Frontend.Models;
 using UMA_SYSTEM.Frontend.Services;
@@ -51,13 +52,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
             return View(denuncia);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> CrearDenuncia(DenunciaAnonimaVM denuncia, IFormFile file)
         {
             if (ModelState.IsValid)
             {
-
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(file.FileName, file.OpenReadStream()),
@@ -67,13 +66,16 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
                 var urlImagen = uploadResult.SecureUrl.ToString();
 
-
                 denuncia.Fecha = DateTime.Now;
                 denuncia.IdEstado = 3;
                 denuncia.Municipio = "Valle de Angeles";
                 denuncia.URLImagen = urlImagen;
 
+                var user = await _lista.GetUsuarioByEmail("usuarioanonimo@gmail.com");
 
+                var servicioToken = new ServicioToken();
+                var token = await servicioToken.Autenticar(user);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var json = JsonConvert.SerializeObject(denuncia);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync("/api/Denuncias/", content);
@@ -108,7 +110,6 @@ namespace UMA_SYSTEM.Frontend.Controllers
 
         public IActionResult CrearSolicitud()
         {
-
             var solicitud = new Solicitud()
             {
                 IdUsuario = 1,
@@ -129,6 +130,12 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 solicitud.FechaSolicitud = DateTime.Now;
                 solicitud.FechaVencimiento = DateTime.Now.AddDays(3);
                 solicitud.FechaAprobacion = DateTime.Now.AddDays(3);
+
+                var user = await _lista.GetUsuarioByEmail("usuarioanonimo@gmail.com");
+
+                var servicioToken = new ServicioToken();
+                var token = await servicioToken.Autenticar(user);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var json = JsonConvert.SerializeObject(solicitud);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -172,6 +179,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
         {
             return View();
         }
+
         public IActionResult CrearSolicitudICF()
         {
             return View();
@@ -185,6 +193,11 @@ namespace UMA_SYSTEM.Frontend.Controllers
                 solicitud.IdEstado = 3;
                 solicitud.Fecha = DateTime.Now;
 
+                var user = await _lista.GetUsuarioByEmail("usuarioanonimo@gmail.com");
+
+                var servicioToken = new ServicioToken();
+                var token = await servicioToken.Autenticar(user);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var json = JsonConvert.SerializeObject(solicitud);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -224,10 +237,13 @@ namespace UMA_SYSTEM.Frontend.Controllers
             return View(solicitud);
         }
 
-
-
         public async Task<IActionResult> VerDenuncia(int id)
         {
+            var user = await _lista.GetUsuarioByEmail("usuarioanonimo@gmail.com");
+
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"/api/Denuncias/{id}");
 
             if (!response.IsSuccessStatusCode)

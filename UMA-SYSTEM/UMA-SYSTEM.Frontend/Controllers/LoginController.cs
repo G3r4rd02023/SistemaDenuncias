@@ -22,8 +22,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
             IServicioLista lista, IMailService mail)
         {
             _httpClient = httpClientFactory.CreateClient();
-            //_httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _bitacora = bitacoraService;
             _parametro = parametro;
             _lista = lista;

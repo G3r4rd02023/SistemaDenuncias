@@ -18,7 +18,8 @@ namespace UMA_SYSTEM.Backend.Data
             await ValidarRolesAsync("Administrador");
             await ValidarRolesAsync("Usuario");
             var rol = _context.Roles.FirstOrDefault();
-            await ValidarUsuariosAsync("0801-1997-12345", "SUPER", "ADMIN", "superadmin@gmail.com", "123456", "Activo", rol!);
+            await ValidarUsuariosAsync("0801-1997-12345", "SUPER", "ADMIN", "superadmin@gmail.com", "Super@Admin2024", "Activo", rol!);
+            await ValidarUsuariosAsync("0801-2024-12345", "USUARIO", "ANONIMO", "usuarioanonimo@gmail.com", "Anonimo@2024", "Activo", rol!);
             await ValidarTiposDenunciaAsync("Contaminación");
             await ValidarTiposDenunciaAsync("Tala de árboles");
             await ValidarTiposDenunciaAsync("Quema de bosque");
@@ -30,7 +31,7 @@ namespace UMA_SYSTEM.Backend.Data
             await ValidarParametrosAsync("Fecha de vencimiento de usuarios", "2", 1);
             await ValidarEstadosAsync("Aceptado");
             await ValidarEstadosAsync("Rechazado");
-            await ValidarEstadosAsync("En Proceso");                       
+            await ValidarEstadosAsync("En Proceso");
         }
 
         private async Task<TipoDenuncia> ValidarTiposDenunciaAsync(string tipo)
@@ -54,7 +55,7 @@ namespace UMA_SYSTEM.Backend.Data
         private async Task<Estado> ValidarEstadosAsync(string descripcion)
         {
             var estadoExistente = await _context.Estados.FirstOrDefaultAsync(e => e.Descripcion == descripcion);
-            if (estadoExistente != null) 
+            if (estadoExistente != null)
             {
                 return estadoExistente;
             }
@@ -72,7 +73,7 @@ namespace UMA_SYSTEM.Backend.Data
         private async Task<Parametro> ValidarParametrosAsync(string nombre, string valor, int idUsuario)
         {
             var parametroExistente = await _context.Parametros.FirstOrDefaultAsync(p => p.Nombre == nombre);
-            if(parametroExistente != null)
+            if (parametroExistente != null)
             {
                 return parametroExistente;
             }
@@ -114,7 +115,7 @@ namespace UMA_SYSTEM.Backend.Data
         private async Task<Rol> ValidarRolesAsync(string nombreRol)
         {
             var rolExistente = await _context.Roles.FirstOrDefaultAsync(r => r.Descripcion == nombreRol);
-            if (rolExistente != null) 
+            if (rolExistente != null)
             {
                 return rolExistente;
             }
@@ -129,7 +130,7 @@ namespace UMA_SYSTEM.Backend.Data
             return rol;
         }
 
-        private async Task<Usuario> ValidarUsuariosAsync(string dni, string nombre, string apellidos, string correo,string clave, string estado, Rol rolUsuario)
+        private async Task<Usuario> ValidarUsuariosAsync(string dni, string nombre, string apellidos, string correo, string clave, string estado, Rol rolUsuario)
         {
             var usuarioExistente = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == correo);
             if (usuarioExistente != null)

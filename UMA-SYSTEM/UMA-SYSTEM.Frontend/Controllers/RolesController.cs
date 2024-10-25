@@ -14,8 +14,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public RolesController(IHttpClientFactory httpClientFactory, IBitacoraService bitacoraService)
         {
             _httpClient = httpClientFactory.CreateClient();
-            // _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7269/");
             _bitacora = bitacoraService;
         }
 

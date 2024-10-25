@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using UMA_SYSTEM.Frontend.Models;
 
 namespace UMA_SYSTEM.Frontend.Services
@@ -11,8 +12,8 @@ namespace UMA_SYSTEM.Frontend.Services
         public ServicioLista(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
-            // _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7269/");
+            _httpClient.BaseAddress = new Uri("https://www.uma-valledeangeles.somee.com/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7269/");
         }
 
         public async Task<IEnumerable<SelectListItem>> GetListaEstados()
@@ -89,6 +90,10 @@ namespace UMA_SYSTEM.Frontend.Services
 
         public async Task<string> ObtenerCodigo()
         {
+            var user = await GetUsuarioByEmail("usuarioanonimo@gmail.com");
+            var servicioToken = new ServicioToken();
+            var token = await servicioToken.Autenticar(user);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync("/api/Denuncias");
             var content = await response.Content.ReadAsStringAsync();
             var denuncias = JsonConvert.DeserializeObject<IEnumerable<Denuncia>>(content);

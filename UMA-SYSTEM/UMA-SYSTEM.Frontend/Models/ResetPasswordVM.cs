@@ -14,7 +14,7 @@ namespace UMA_SYSTEM.Frontend.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Nueva contraseña")]
-        [StringLength(20, MinimumLength = 8, ErrorMessage = "El campo {0} debe tener entre {2} y {1} carácteres.")]
+        [StringLength(64, MinimumLength = 8, ErrorMessage = "El campo {0} debe tener entre {2} y {1} carácteres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$",
     ErrorMessage = "El campo {0} debe tener al menos una letra mayúscula, una minúscula, un número y un carácter especial.")]
@@ -23,7 +23,7 @@ namespace UMA_SYSTEM.Frontend.Models
         [Compare("NewPassword", ErrorMessage = "La nueva contraseña y la confirmación no son iguales.")]
         [DataType(DataType.Password)]
         [Display(Name = "Confirmación nueva contraseña")]
-        [StringLength(20, MinimumLength = 8, ErrorMessage = "El campo {0} debe tener entre {2} y {1} carácteres.")]
+        [StringLength(64, MinimumLength = 8, ErrorMessage = "El campo {0} debe tener entre {2} y {1} carácteres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$",
     ErrorMessage = "El campo {0} debe tener al menos una letra mayúscula, una minúscula, un número y un carácter especial.")]
