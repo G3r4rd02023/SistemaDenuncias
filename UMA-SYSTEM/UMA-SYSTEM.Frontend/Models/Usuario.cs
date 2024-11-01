@@ -39,6 +39,7 @@ namespace UMA_SYSTEM.Frontend.Models
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string EstadoUsuario { get; set; } = null!;
 
+        public bool SesionActiva { get; set; }
         public int NumeroIntentos { get; set; }
         public int RolId { get; set; }
         public Rol? Rol { get; set; }

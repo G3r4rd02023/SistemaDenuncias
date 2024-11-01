@@ -47,14 +47,38 @@ namespace UMA_SYSTEM.Backend.Controllers
 
             if (usuario != null && usuario.EstadoUsuario == "Activo")
             {
+                if (usuario.SesionActiva)
+                {
+                    return Conflict(new { Message = "El usuario ya tiene una sesion activa." });
+                }
+
                 if (BCrypt.Net.BCrypt.Verify(login.Contraseña, usuario.Contraseña))
                 {
+                    usuario.SesionActiva = true;
+                    await _context.SaveChangesAsync();
+
                     // Aquí puedes agregar la lógica para generar un token JWT o manejar la sesión como prefieras
                     return Ok(new { Message = "Inicio de sesión exitoso." });
                 }
             }
 
             return Unauthorized(new { Message = "Inicio de sesión fallido. Usuario o contraseña incorrectos." });
+        }
+
+        [HttpPost("CerrarSesion")]
+        public async Task<IActionResult> Logout([FromBody] LoginViewModel login)
+        {
+            var usuario = await _context.Usuarios
+                .SingleOrDefaultAsync(u => u.Email == login.Email);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            usuario.SesionActiva = false;
+            await _context.SaveChangesAsync();
+            return Ok(new { Message = " La sesión se cerró exitosamente." });
         }
     }
 }

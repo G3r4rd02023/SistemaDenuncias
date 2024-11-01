@@ -26,14 +26,16 @@ namespace UMA_SYSTEM.Backend.Models
         [MaxLength(256, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Contraseña { get; set; } = null!;
+
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaVencimiento { get; set; }
 
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string EstadoUsuario { get; set; } = null!;
+
+        public bool SesionActiva { get; set; }
         public int NumeroIntentos { get; set; }
         public int RolId { get; set; }
         public Rol? Rol { get; set; }
-
     }
 }

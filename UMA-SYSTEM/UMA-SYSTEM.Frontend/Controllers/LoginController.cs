@@ -67,7 +67,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
                        $"<h1>UMA-Correo de confirmacion de Usuario</h1>",
                         $"Tu solicitud de usuario ha sido aprobada, para acceder al sistema, ingresa a UMA-SYSTEM" +
                               $"<p><a href =>Mas Detalles</a></p>" +
-                              $"https://localhost:7125/"
+                              $"https://www.umasystem.somee.com"
                        );
                     TempData["Message"] = "Usuario registrado exitosamente, las instrucciones para su activación han sido enviadas a su correo";
                     var user = await _lista.GetUsuarioByEmail(User.Identity!.Name!);
@@ -113,10 +113,10 @@ namespace UMA_SYSTEM.Frontend.Controllers
                         var descripcion = rol!.Descripcion;
 
                         var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, model.Email),
-                        new Claim(ClaimTypes.Role, descripcion),
-                    };
+                        {
+                            new Claim(ClaimTypes.Name, model.Email),
+                            new Claim(ClaimTypes.Role, descripcion),
+                        };
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -127,8 +127,15 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     }
                     else
                     {
-                        usuario.NumeroIntentos += 1;
-                        ViewData["AlertMessage"] = "Usuario o clave incorrectos!!! numero de intentos: " + usuario.NumeroIntentos;
+                        if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                        {
+                            ViewData["AlertMessage"] = "Este usuario ya tiene una sesion iniciada en el sistema";
+                        }
+                        else
+                        {
+                            usuario.NumeroIntentos += 1;
+                            ViewData["AlertMessage"] = "Usuario o clave incorrectos!!! numero de intentos: " + usuario.NumeroIntentos;
+                        }
                     }
                 }
             }
@@ -142,10 +149,22 @@ namespace UMA_SYSTEM.Frontend.Controllers
         public async Task<IActionResult> CerrarSesion()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             var email = Uri.EscapeDataString(User.Identity!.Name!);
             var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
             var usuarioJson = await userResponse.Content.ReadAsStringAsync();
             var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+
+            var model = new LoginViewModel()
+            {
+                Email = usuario!.Email,
+                Contraseña = usuario.Contraseña
+            };
+
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            await _httpClient.PostAsync("/api/Login/CerrarSesion", content);
+
             await _bitacora.AgregarRegistro(usuario!.Id, 1, "Finalizó sesión", "Fin de la sesión en el sistema");
             return RedirectToAction("IniciarSesion", "Login");
         }
