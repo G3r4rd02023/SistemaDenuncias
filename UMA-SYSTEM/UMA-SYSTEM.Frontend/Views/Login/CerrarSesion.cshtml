@@ -1,0 +1,19 @@
+﻿@model UMA_SYSTEM.Frontend.Models.Usuario
+@{
+    ViewData["Title"] = "CerrarSesion";
+}
+
+<div class="text-center">
+    <div class="text-center text-success">
+        <h5>El usuario  @Model.FullName ya tiene una sesion activa en el sistema.</h5>
+    </div>
+
+    <form asp-action="CerrarSesion" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Email"/>
+        <input type="hidden" asp-for="Contraseña"/>
+        <button type="submit" class="btn-lg btn btn-primary">Cerrar Sesion</button>
+    </form>
+</div>
+
+

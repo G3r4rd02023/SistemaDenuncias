@@ -129,7 +129,8 @@ namespace UMA_SYSTEM.Frontend.Controllers
                     {
                         if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
                         {
-                            ViewData["AlertMessage"] = "Este usuario ya tiene una sesion iniciada en el sistema";
+                            ViewData["AlertMessage"] = "Este usuario ya tiene una sesion iniciada en el sistema, Desea cerrar la sesion existente?";
+                            return RedirectToAction("CerrarSesion", "Login", new { correo = model.Email });
                         }
                         else
                         {
@@ -146,7 +147,7 @@ namespace UMA_SYSTEM.Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> CerrarSesion()
+        public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -155,6 +156,34 @@ namespace UMA_SYSTEM.Frontend.Controllers
             var usuarioJson = await userResponse.Content.ReadAsStringAsync();
             var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
 
+            var model = new LoginViewModel()
+            {
+                Email = usuario!.Email,
+                Contraseña = usuario.Contraseña
+            };
+
+            var json = JsonConvert.SerializeObject(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            await _httpClient.PostAsync("/api/Login/CerrarSesion", content);
+
+            await _bitacora.AgregarRegistro(usuario!.Id, 1, "Finalizó sesión", "Fin de la sesión en el sistema");
+            return RedirectToAction("IniciarSesion", "Login");
+        }
+
+        public async Task<IActionResult> CerrarSesion(string correo)
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var email = Uri.EscapeDataString(correo);
+            var userResponse = await _httpClient.GetAsync($"/api/Usuarios/email/{email}");
+            var usuarioJson = await userResponse.Content.ReadAsStringAsync();
+            var usuario = JsonConvert.DeserializeObject<Usuario>(usuarioJson);
+            return View(usuario);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CerrarSesion(Usuario usuario)
+        {
             var model = new LoginViewModel()
             {
                 Email = usuario!.Email,
